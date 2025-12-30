@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New York Flu Vaccination Statistics</title>
+  <style>
+    body {
+      font-family: Georgia, sans-serif;
+      background-color: #DAE7F6; 
+      color: black; 
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #040273; 
+      padding: 20px;
+      text-align: center;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2.5em;
+      color: white; 
+    }
+    .container {
+      padding: 20px;
+    }
+    .stat-card {
+      background-color: #9bbcdb; 
+      margin: 15px 0;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+    .stat-card2 {
+      background-color: #9bbcdb; 
+      margin: 15px 0;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .number-box {
+      font-size: 4em;
+      font-weight: bold;
+      color: black;
+      border-right: 5px solid black;
+      padding-right: 20px;
+      margin-right: 20px;
+    }
+    .stat-card h2 {
+      font-size: 1.8em;
+      color: black; 
+    }
+    .stat-card p {
+      font-size: 1.2em;
+      color: black; 
+    }
+    canvas {
+      max-width: 100%;
+      margin-top: 20px;
+    }
+  </style>
+  <!-- Include Chart.js library -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header>
+    <h1>New York Flu Vaccination Statistics</h1>
+  </header>
+
+  <div class="container">
+    <div class="stat-card2">
+      <div class="number-box">10.2M</div>
+      <p>As of 2025, more than 10.2 million flu vaccine doses have been administered in New York State, with 9.5 million individuals receiving the flu vaccine. This represents about 88% of the state's total population during the flu season.</p>
+    </div>
+
+    <div class="stat-card">
+      <h2>Fully Vaccinated Individuals</h2>
+      <p>Approximately 9.5 million New Yorkers are fully vaccinated against the flu, representing 85% of the population. This includes people who have received the annual flu shot during the flu season.</p>
+    </div>
+
+    <div class="stat-card">
+      <h2>Flu Vaccine Uptake by Age Group</h2>
+      <p>Flu vaccination uptake varies across different age groups:</p>
+      <ul>
+        <li>Adults aged 65 and older: 80% of this age group has received the flu vaccine.</li>
+        <li>Adults aged 45-64: Approximately 75% of individuals in this group have been vaccinated.</li>
+        <li>Adults aged 25-44: About 70% have received the vaccine during the flu season.</li>
+        <li>Adults aged 18-24: Flu vaccine uptake in this group is around 60%.</li>
+        <li>Children aged 6-17: Approximately 70% of children have been vaccinated against the flu this season.</li>
+      </ul>
+
+      <!-- Canvas for Age Group Flu Vaccination Chart -->
+      <canvas id="ageGroupFluChart"></canvas>
+    </div>
+
+    <!-- Flu Vaccine Breakdown by Ethnicity Section -->
+    <div class="stat-card">
+      <h2>Flu Vaccination Rates by Ethnicity</h2>
+      <p>The flu vaccination rates in New York vary by ethnicity:</p>
+      <ul>
+        <li>White New Yorkers: Approximately 85% have received the flu vaccine.</li>
+        <li>Asian New Yorkers: About 80% have been vaccinated against the flu.</li>
+        <li>Black New Yorkers: Around 65% of Black New Yorkers have received the flu vaccine.</li>
+        <li>Hispanic/Latino New Yorkers: Vaccination rates are about 68% among the Latino population.</li>
+        <li>Other Ethnic Groups: Flu vaccination rates are approximately 60% for other ethnic groups.</li>
+      </ul>
+
+      <!-- Canvas for Ethnicity Flu Vaccination Chart -->
+      <canvas id="ethnicityFluChart"></canvas>
+    </div>
+
+    <div class="stat-card">
+      <h2>Flu Vaccination Rates by Region</h2>
+      <p>Flu vaccination rates differ significantly across regions in New York:</p>
+      <ul>
+        <li>New York City: Vaccination rates in NYC are high, at approximately 75% of the population.</li>
+        <li>Long Island: About 70% of Long Island residents have been vaccinated against the flu.</li>
+        <li>Upstate New York: Vaccination rates in upstate New York vary, with urban areas having rates of 70-80%, while rural areas lag behind with only 50-60% vaccinated.</li>
+      </ul>
+    </div>
+
+    <div class="stat-card">
+      <h2>Flu Vaccination Rates Among Healthcare Workers</h2>
+      <p>Healthcare workers have a high flu vaccination rate, with about 95% of New York healthcare professionals receiving their flu vaccine each year.</p>
+    </div>
+
+    <div class="stat-card">
+      <h2>Flu Vaccination Rates Among Students</h2>
+      <p>Student vaccination rates for the flu have also been strong, with approximately 80% of college students vaccinated, and 70% of high school students receiving the flu shot.</p>
+    </div>
+
+    <div class="stat-card">
+      <h2>Challenges and Future Flu Vaccination Plans</h2>
+      <p>New York has faced challenges with flu vaccination uptake in certain demographics, including:</p>
+      <ul>
+        <li>Efforts to target young adults who are less likely to receive the flu vaccine.</li>
+        <li>Outreach programs in underserved communities to increase vaccine access and awareness.</li>
+        <li>Increasing flu vaccine uptake in rural areas through mobile vaccination clinics and educational campaigns.</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    // Setup chart data for Age Group Flu Vaccination Rates
+    var ctxAgeGroupFlu = document.getElementById('ageGroupFluChart').getContext('2d');
+    var ageGroupFluChart = new Chart(ctxAgeGroupFlu, {
+      type: 'bar',
+      data: {
+        labels: ['65 and older', '45-64', '25-44', '18-24', '6-17'],
+        datasets: [{
+          label: 'Flu Vaccination Rate (%)',
+          data: [80, 75, 70, 60, 70],
+          backgroundColor: '#336290',
+          borderColor: '#264a6c',
+          borderWidth: 1.5
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 100,
+            ticks: {
+              stepSize: 10
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            callbacks: {
+              label: function(tooltipItem) {
+                return tooltipItem.raw + '%';
+              }
+            }
+          }
+        }
+      }
+    });
+
+    // Setup chart data for Ethnicity Flu Vaccination Rates
+    var ctxEthnicityFlu = document.getElementById('ethnicityFluChart').getContext('2d');
+    var ethnicityFluChart = new Chart(ctxEthnicityFlu, {
+      type: 'bar',
+      data: {
+        labels: ['White', 'Asian', 'Black', 'Hispanic/Latino', 'Other Ethnic Groups'],
+        datasets: [{
+          label: 'Flu Vaccination Rate (%)',
+          data: [85, 80, 65, 68, 60],
+          backgroundColor: '#122f4f',
+          borderColor: '#0f2741',
+          borderWidth: 1.5
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 100,
+            ticks: {
+              stepSize: 10
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            callbacks: {
+              label: function(tooltipItem) {
+                return tooltipItem.raw + '%';
+              }
+            }
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
