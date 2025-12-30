@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New York Vaccine Statistics</title>
+  <style>
+    body {
+      font-family: Georgia, sans-serif;
+      background-color: #DAE7F6; 
+      color: black; 
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #040273; 
+      padding: 20px;
+      text-align: center;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2.5em;
+      color: white; 
+    }
+    .container {
+      padding: 20px;
+    }
+    .stat-card {
+      background-color: #9bbcdb; 
+      margin: 15px 0;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+    .stat-card2 {
+      background-color: #9bbcdb; 
+      margin: 15px 0;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .number-box {
+      font-size: 4em;
+      font-weight: bold;
+      color: black;
+      border-right: 5px solid black;
+      padding-right: 20px;
+      margin-right: 20px;
+    }
+    .stat-card h2 {
+      font-size: 1.8em;
+      color: black; 
+    }
+    .stat-card p {
+      font-size: 1.2em;
+      color: black; 
+    }
+    canvas {
+      max-width: 100%;
+      margin-top: 20px;
+    }
+  </style>
+  <!-- Include Chart.js library -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header>
+    <h1>New York COVID-19 Vaccine Statistics</h1>
+  </header>
+
+  <div class="container">
+    <div class="stat-card2">
+      <div class="number-box">18.5M</div>
+      <p>As of March 2025, over 18.5 million vaccine doses have been administered in New York State, with 15.8 million individuals receiving at least one dose of the COVID-19 vaccine. This represents approximately 95% of the state's total population.</p>
+    </div>
+
+    <div class="stat-card">
+      <h2>Fully Vaccinated Individuals</h2>
+      <p>Approximately 15.8 million New Yorkers are fully vaccinated, representing 81% of the population. This includes people who have completed the required number of doses for the initial vaccine series.</p>
+    </div>
+
+    <div class="stat-card">
+      <h2>Booster Shots Administered</h2>
+      <p>More than 5.3 million booster shots have been administered to New Yorkers, reaching about 30% of the population. Booster shot uptake varies by age, with older adults being the primary recipients of boosters.</p>
+    </div>
+
+    <div class="stat-card">
+      <h2>Vaccination Breakdown by Gender</h2>
+      <p>Women have been more likely to get vaccinated compared to men. Approximately 72% of women in New York have received at least one dose, while 66% of men have been vaccinated. This trend is consistent across different age groups and ethnicities.</p>
+      
+      <!-- Canvas for Gender Vaccination Breakdown Pie Chart -->
+      <canvas id="genderChart"></canvas>
+    </div>
+
+    <!-- Age Group Vaccination Rates Section with Graph -->
+    <div class="stat-card">
+      <h2>Age Group Vaccination Rates</h2>
+      <p>The vaccination rates vary significantly by age group:</p>
+      <ul>
+        <li>Adults aged 65 and older: Over 85% of people in this age group are fully vaccinated, making it the highest vaccinated demographic in the state.</li>
+        <li>Adults aged 45-64: Approximately 80% of this group has received at least one dose.</li>
+        <li>Adults aged 25-44: About 70% have been vaccinated, with many in this age group opting for the vaccine later than other groups.</li>
+        <li>Young adults aged 18-24: Vaccination rates in this group are around 65%, with a noticeable decline in uptake compared to older age groups.</li>
+        <li>Teens aged 12-17: Around 75% of teenagers have received at least one dose of the vaccine, as schools and universities have played a significant role in encouraging vaccination.</li>
+      </ul>
+      
+      <!-- Canvas for Age Group Vaccination Rates Chart -->
+      <canvas id="ageGroupChart"></canvas>
+    </div>
+
+    <!-- Vaccination Rates by Ethnicity Section with Graph -->
+    <div class="stat-card">
+      <h2>Vaccination Rates by Ethnicity</h2>
+      <p>Vaccination rates in New York vary by ethnicity, with some groups having lower rates than others:</p>
+      <ul>
+        <li>White New Yorkers: Approximately 85% have received at least one dose, making this group the most vaccinated.</li>
+        <li>Asian New Yorkers: Vaccination rates are also high, at about 80%, though slightly lower than that of White residents.</li>
+        <li>Black New Yorkers: Around 65% of Black New Yorkers have been vaccinated, with targeted outreach efforts aimed at increasing this rate.</li>
+        <li>Hispanic/Latino New Yorkers: Approximately 68% of this community has been vaccinated, with significant efforts to improve vaccine access and information in Spanish-speaking communities.</li>
+        <li>Other Ethnic Groups: Vaccination rates in Native American and other ethnic minority groups are around 60%.</li>
+      </ul>
+      
+      <!-- Canvas for Ethnicity Vaccination Rates Chart -->
+      <canvas id="ethnicityChart"></canvas>
+    </div>
+
+    <div class="stat-card">
+      <h2>Vaccination Rates by Region</h2>
+      <p>There are noticeable regional differences in vaccination rates across New York:</p>
+      <ul>
+        <li>New York City: Vaccination rates in NYC are among the highest in the state, with 80% of the population receiving at least one dose. This is due to the city's concentrated efforts in vaccine distribution, especially in diverse neighborhoods.</li>
+        <li>Long Island: Vaccination rates on Long Island are slightly lower than in NYC, with approximately 75% of the population vaccinated.</li>
+        <li>Upstate New York: Rates in upstate New York are more variable, with urban areas like Albany and Buffalo showing higher vaccination rates (70-80%), while rural areas have significantly lower rates (50-60%).</li>
+      </ul>
+    </div>
+
+    <div class="stat-card">
+      <h2>Vaccination Among Healthcare Workers</h2>
+      <p>Healthcare workers in New York have generally had high vaccination uptake, with approximately 95% of medical professionals receiving at least one dose. Efforts to ensure the safety of healthcare workers have been critical in ensuring high vaccination rates within this group.</p>
+    </div>
+
+    <div class="stat-card">
+      <h2>Vaccination Rates Among Students</h2>
+      <p>Vaccination rates for students have seen a significant increase, especially with mandates in place for universities and K-12 schools. Over 80% of college students in New York have been vaccinated, while 70% of high school students have received at least one dose. The state continues to encourage vaccination through school programs and public health campaigns.</p>
+    </div>
+
+    <div class="stat-card">
+      <h2>Vaccination by Employment Sector</h2>
+      <p>The vaccination rates also vary by employment sector. Key sectors include:</p>
+      <ul>
+        <li>Education: Approximately 75% of educators have received the vaccine.</li>
+        <li>Retail and Hospitality: These sectors have lower vaccination rates, around 60-65%, with ongoing efforts to provide easy access to vaccines for essential workers.</li>
+        <li>Public Transportation: Approximately 70% of public transit workers are vaccinated.</li>
+      </ul>
+    </div>
+
+    <div class="stat-card">
+      <h2>Challenges and Future Vaccination Plans</h2>
+      <p>New York has focused efforts on increasing vaccination rates in certain populations that remain hesitant or underserved. These efforts include:</p>
+      <ul>
+        <li>Mobile vaccination units for rural areas and underserved neighborhoods.</li>
+        <li>Community outreach programs to address vaccine hesitancy in specific populations, particularly Black and Latino communities.</li>
+        <li>Targeted campaigns to increase booster shot uptake, particularly in older adults and people with underlying health conditions.</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    // Setup chart data for Age Group Vaccination Rates
+    var ctxAgeGroup = document.getElementById('ageGroupChart').getContext('2d');
+    var ageGroupChart = new Chart(ctxAgeGroup, {
+      type: 'bar',
+      data: {
+        labels: ['65 and older', '45-64', '25-44', '18-24', '12-17'],
+        datasets: [{
+          label: 'Vaccination Rate (%)',
+          data: [85, 80, 70, 65, 75],
+          backgroundColor: '#336290',
+          borderColor: '#264a6c',
+          borderWidth: 1.5
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 100,
+            ticks: {
+              stepSize: 10
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            callbacks: {
+              label: function(tooltipItem) {
+                return tooltipItem.raw + '%';
+              }
+            }
+          }
+        }
+      }
+    });
+
+    // Setup chart data for Ethnicity Vaccination Rates
+    var ctxEthnicity = document.getElementById('ethnicityChart').getContext('2d');
+    var ethnicityChart = new Chart(ctxEthnicity, {
+      type: 'bar',
+      data: {
+        labels: ['White', 'Asian', 'Black', 'Hispanic/Latino', 'Other Ethnic Groups'],
+        datasets: [{
+          label: 'Vaccination Rate (%)',
+          data: [85, 80, 65, 68, 60],
+          backgroundColor: '#122f4f',
+          borderColor: '#0f2741',
+          borderWidth: 1.5
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 100,
+            ticks: {
+              stepSize: 10
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            callbacks: {
+              label: function(tooltipItem) {
+                return tooltipItem.raw + '%';
+              }
+            }
+          }
+        }
+      }
+    });
+
+    // Setup pie chart data for Gender Vaccination Breakdown
+    var ctxGender = document.getElementById('genderChart').getContext('2d');
+    var genderChart = new Chart(ctxGender, {
+      type: 'pie',
+      data: {
+        labels: ['Women', 'Men'],
+        datasets: [{
+          data: [72, 66],
+          backgroundColor: ['#336290', '#DAE7F6'],
+          borderColor: ['#264a6c', '#d1e0ee'],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          tooltip: {
+            callbacks: {
+              label: function(tooltipItem) {
+                return tooltipItem.raw + '%';
+              }
+            }
+          }
+        }
+      }
+    });
+  </script>
+</body>
