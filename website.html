@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>NYC Map (Free Version)</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+  <style>
+    #map { height: 500px; width: 100%; }
+    .btn {
+      background: white;
+      padding: 6px 12px;
+      border: 1px solid #888;
+      cursor: pointer;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+
+// ---------- Your GeoJSON Data ----------
+const geojsonData = {
+  "type": "FeatureCollection",
+  "features": [
+    {"type":"Feature","properties":{"location":"Dekalb Ave & Flatbush Ave"},"geometry":{"type":"Point","coordinates":[-73.98109555019138,40.68985092532933]}},
+    {"type":"Feature","properties":{"location":"Grahan Ave & Metropolitan Ave"},"geometry":{"type":"Point","coordinates":[-73.94451215478905,40.71471230203185]}},
+    {"type":"Feature","properties":{"location":"Kings Hwy & E. 15th St"},"geometry":{"type":"Point","coordinates":[-73.95815283488757,40.60888029893385]}},
+    {"type":"Feature","properties":{"location":"4th Ave & 36th St"},"geometry":{"type":"Point","coordinates":[-74.00418544571221,40.654290631076414]}},
+    {"type":"Feature","properties":{"location":"Surf Ave & Stillwell Ave"},"geometry":{"type":"Point","coordinates":[-73.98049489893239,40.57567391264483]}},
+    {"type":"Feature","properties":{"location":"E. Kingbridge Rd & Briggs Ave"},"geometry":{"type":"Point","coordinates":[-73.89429103041087,40.86297019613109]}},
+    {"type":"Feature","properties":{"location":"Grand Concourse & E.Tremont Ave"},"geometry":{"type":"Point","coordinates":[-73.90601188067646,40.849842862422626]}},
+    {"type":"Feature","properties":{"location":"E. 17th St & Broadway"},"geometry":{"type":"Point","coordinates":[-73.989978555,40.73701791033392]}},
+    {"type":"Feature","properties":{"location":"W. 23rd St & 6th Ave"},"geometry":{"type":"Point","coordinates":[-73.99256188367652,40.742698515904735]}},
+    {"type":"Feature","properties":{"location":"W. 23rd St & 8th Ave"},"geometry":{"type":"Point","coordinates":[-73.99808717183724,40.74522816999436]}},
+    {"type":"Feature","properties":{"location":"Rutgers St & East Broadway"},"geometry":{"type":"Point","coordinates":[-73.99009279896514,40.71379174465101]}},
+    {"type":"Feature","properties":{"location":"Jackson Ave & 50th Ave"},"geometry":{"type":"Point","coordinates":[-73.95218731600916,40.742658633047895]}},
+    {"type":"Feature","properties":{"location":"31st St & 30th Ave"},"geometry":{"type":"Point","coordinates":[-73.92150005764297,40.766572706970074]}},
+    {"type":"Feature","properties":{"location":"Lefferts Blvd & Liberty Ave"},"geometry":{"type":"Point","coordinates":[-73.82394086263547,40.68597530941907]}},
+    {"type":"Feature","properties":{"location":"71st Ave & Austin St"},"geometry":{"type":"Point","coordinates":[-73.84484203907775,40.719916586642114]}},
+    {"type":"Feature","properties":{"location":"Father Capodanno Blvd & Sand Lane"},"geometry":{"type":"Point","coordinates":[-74.0661975758172,40.5905069173068]}},
+    {"type":"Feature","properties":{"location":"Richmond Ave & Wainwright Ave"},"geometry":{"type":"Point","coordinates":[-74.17097248892372,40.56015795513925]}}
+  ]
+};
+
+// ---------- Initialize Map ----------
+const map = L.map('map').setView([40.7128, -74.0060], 11);
+
+// Free OpenStreetMap tiles
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 19,
+}).addTo(map);
+
+// ---------- Add GeoJSON Points ----------
+L.geoJSON(geojsonData, {
+  pointToLayer: (feature, latlng) => {
+    return L.circleMarker(latlng, {
+      radius: 6,
+      color: "#f00",
+      fillColor: "#f00",
+      fillOpacity: 1
+    });
+  },
+  onEachFeature: (feature, layer) => {
+    layer.bindPopup(feature.properties.location);
+  }
+}).addTo(map);
+
+// ---------- Geolocation Button ----------
+const locateBtn = L.control({position:'topright'});
+locateBtn.onAdd = function() {
+  const btn = L.DomUtil.create('button', 'btn');
+  btn.innerHTML = "📍 My Location";
+  btn.onclick = () => {
+    map.locate({setView:true, maxZoom:15});
+  };
+  return btn;
+};
+locateBtn.addTo(map);
+
+// Show marker after location found
+map.on('locationfound', (e) => {
+  L.marker(e.latlng).addTo(map)
+    .bindPopup("You are here").openPopup();
+});
+
+map.on('locationerror', () => {
+  alert("Unable to access your location.");
+});
+
+</script>
+</body>
+</html>
+
