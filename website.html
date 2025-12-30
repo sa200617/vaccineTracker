@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>NYC Map (Free Version)</title>
+  <title>Rochester Vaccination Map</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -11,93 +11,348 @@
   <style>
     #map { height: 500px; width: 100%; }
     .btn {
-      background: white;
+      background: pink;
       padding: 6px 12px;
       border: 1px solid #888;
       cursor: pointer;
+      font-size: 12px;
+    }
+    .leaflet-popup-content-wrapper { 
+      background-color: rgba(255, 255, 255, 0.8);
+      font: Georgia, serif;
       font-size: 14px;
+    }
+    .leaflet-popup-content{
+      font-family: Georgia, serif;
+      font-size: 14px;
+      color: #000;           
+    }
+    h1{
+      font-family: Georgia, serif;
+      text-align: center;
+      font-size: 40px;
+      color: #040273;
+      border: 2px solid black;
+      background-color: #DAE7F6;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    p{
+      font-family: Georgia, serif;
+      font-size: 16px;
+      color: #000;
+      padding: 10px 20px;
+      margin-bottom: 20px;
+    }
+    .continue-btn {
+      background-color: #040273;
+      text-align: center;
+      font-family: Georgia, serif;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 14px;
+      border-radius: 4px;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
+  <h1>Where to get Vaccinated?</h1>
+  <p>
+    Explore this interactive map, where you can find pharmacies and clinics in Rochester, NY 
+    that offer flu shots! Click on any marker to see more information about that location, 
+    including the address, accepted insurance plans, approximate cost without insurance, 
+    phone number, rating, and hours of operation. When you click the Continue button in 
+    the popup, you will be taken to the next step in the booking process, where you can 
+    see whether the location accepts walk-ins or requires an appointment. If an appointment 
+    is needed, we will guide you step by step through the booking process, making it easy 
+    and hassle-free. Get your flu shot today and stay healthy this season!
+  </p>
+  
+  <div id="map"></div>
 
-<div id="map"></div>
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
-<!-- Leaflet JS -->
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    // ---------- GeoJSON Data ----------
+    const geojsonData = {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "properties": {
+            "name": "<b>Name</b>: CVS Pharmacy",
+            "address": "<b>Address</b>: 185 Winston Rd North, Rochester, NY, 14610",
+            "insurance": "<b>Insurance</b>: Aetna, Blue Cross Blue Shield, Cigna, Medicare Part B, and many commercial/Medicaid plans",
+            "cost": "<b>Approximate Cost Without Insurance</b>: $68.99",
+            "destination": "<b>Destination</b>: N/A",
+            "rating": "<b>Rating</b>: 3.8/5",
+            "phone": "<b>Phone</b>: (585) 288-4422",
+            "hour":"<b>Hours:</b>:",            
+            "hours": [
+              "<b>Monday</b>: 8:00 AM - 10:00 PM",
+              "<b>Tuesday</b>: 8:00 AM - 10:00 PM",
+              "<b>Wednesday</b>: 8:00 AM - 10:00 PM",
+              "<b>Thursday</b>: 8:00 AM - 10:00 PM",
+              "<b>Friday</b>: 8:00 AM - 10:00 PM",
+              "<b>Saturday</b>: 8:00 AM - 10:00 PM",
+              "<b>Sunday</b>: 8:00 AM - 10:00 PM"
+            ]
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [-77.5540552, 43.1489794]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "name": "<b>Name</b>: Trillium Health Pharmacy",
+            "address": "<b>Address</b>: 259 Monroe Ave, Rochester, NY 14607",
+            "insurance": "<b>Insurance</b>: Medicare (Part B/ Part D), Medicaid, and many commercial/private insurance plans",
+            "cost": "<b>Approximate Cost Without Insurance</b>: $40",
+            "destination": "<b>Destination</b>: N/A",
+            "rating": "<b>Rating</b>: 3.8/5",
+            "phone": "<b>Phone</b>: 585.545.7200",
+            "hour": "<b>Hours</b>:",
+            "hours": [
+              "<b>Monday</b>: 8:00 AM - 6:00 PM",
+              "<b>Tuesday</b>: 8:00 AM - 6:00 PM",
+              "<b>Wednesday</b>: 8:00 AM - 6:00 PM",
+              "<b>Thursday</b>: 9:00 AM - 6:00 PM",
+              "<b>Friday</b>: 9:00 AM - 5:00 PM",
+              "<b>Saturday</b>: Closed",
+              "<b>Sunday</b>: Closed"
+            ]
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [-77.599334, 43.1490393]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "name": "<b>Name</b>: Alexander Pharmacy",
+            "address": "<b>Address</b>: 222 Alexander Street, Rochester NY 14607",
+            "insurance": "<b>Insurance</b>: Medicare Part B, Medicaid, and many commercial/ private insurance plans are accepted (should be confirmed by phone for private/ commercial insurance)",
+            "cost": "<b>Approximate Cost Without Insurance</b>: $35",
+            "destination": "<b>Destination</b>: N/A",
+            "rating": "<b>Rating</b>: 3.8/5",
+            "phone": "<b>Phone</b>: 585.262.3760",
+            "hour": "<b>Hours</b>:",
+            "hours": [
+              "<b>Monday</b>: 9:00 AM - 6:00 PM",
+              "<b>Tuesday</b>: 9:00 AM - 6:00 PM",
+              "<b>Wednesday</b>: 9:00 AM - 6:00 PM",
+              "<b>Thursday</b>: 9:00 AM - 6:00 PM",
+              "<b>Friday</b>: 9:00 AM - 6:00 PM",
+              "<b>Saturday</b>: Closed",
+              "<b>Sunday</b>: Closed"
+            ]
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [-77.5964142, 43.1499932]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "name": "<b>Name</b>: Rochester Care Pharmacy",
+            "address": "<b>Address</b>: 192 Lyell Ave, Rochester NY 14608",
+            "insurance": "<b>Insurance</b>: Medicare Part B, Medicaid, and many commercial/private insurance plans (including employer and marketplace plans); pharmacy discount programs may be accepted",
+            "cost": "<b>Approximate Cost Without Insurance</b>: $30",
+            "destination": "<b>Destination</b>: N/A",
+            "rating": "<b>Rating</b>: 4.7/5",
+            "phone": "<b>Phone</b>: 585.719.1932",
+            "hour": "<b>Hours</b>:",
+            "hours": [
+              "<b>Monday</b>: 8:00 AM - 5:00 PM",
+              "<b>Tuesday</b>: 8:00 AM - 5:00 PM",
+              "<b>Wednesday</b>: 8:00 AM - 5:00 PM",
+              "<b>Thursday</b>: 8:00 AM - 5:00 PM",
+              "<b>Friday</b>: 8:00 AM - 5:00 PM",
+              "<b>Saturday</b>: 9:00 AM - 2:00 PM",
+              "<b>Sunday</b>: Closed"
+            ]
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [-77.629582, 43.1647631]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "name": "<b>Name</b>: Walgreens Pharmacy",
+            "address": "<b>Address</b>: 720 East Ridge Road, Rochester, NY 14621",
+            "insurance": "<b>Insurance</b>: Accepts most major insurance plans, including Aetna, Cigna, Excellus BCBS, Medicare, and UnitedHealthcare",
+            "cost": "<b>Approximate Cost Without Insurance</b>: $40",
+            "destination": "<b>Destination</b>: N/A",
+            "rating": "<b>Rating</b>: 3.3/5",
+            "phone": "<b>Phone</b>: 585.266.8994",
+            "hour": "<b>Hours</b>:",
+            "hours": [
+              "<b>Monday</b>: 8:00 AM - 9:00 PM",
+              "<b>Tuesday</b>: 8:00 AM - 9:00 PM",
+              "<b>Wednesday</b>: 8:00 AM - 9:00 PM",
+              "<b>Thursday</b>: 8:00 AM - 9:00 PM",
+              "<b>Friday</b>: 8:00 AM - 9:00 PM",
+              "<b>Saturday</b>: 9:00 AM - 9:00 PM",
+              "<b>Sunday</b>: 8:00 AM - 9:00 PM"
+            ]
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [-77.5995257, 43.1973642]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "name": "<b>Name</b>: Jordan Health Pharmacy",
+            "address": "<b>Address</b>: 82 Holland St, Rochester, NY 14605",
+            "insurance": "<b>Insurance</b>:  Medicaid, Medicare Part B, Medicare Advantage Plans, Commercial/private health insurance plans (e.g., Aetna, Cigna, UnitedHealthcare, Blue Cross Blue Shield, Fidelis, Molina, MVP, etc.), Marketplace/ACA insurance plans",
+            "cost": "<b>Approximate Cost Without Insurance</b>: $20 – $70+",
+            "destination": "<b>Destination</b>: N/A",
+            "rating": "<b>Rating</b>: 4.7/5",
+            "phone": "<b>Phone</b>: 585.719.1932",
+            "hour": "<b>Hours</b>:",
+            "hours": [
+              "<b>Monday</b>: 8:00 AM - 12:00 PM and 1:00 PM - 5:00 PM",
+              "<b>Tuesday</b>: 8:00 AM - 12:00 PM and 1:00 PM - 5:00 PM",
+              "<b>Wednesday</b>: 8:00 AM - 12:00 PM and 1:00 PM - 5:00 PM",
+              "<b>Thursday</b>: 8:00 AM - 12:00 PM and 1:00 PM - 5:00 PM",
+              "<b>Friday</b>: 8:00 AM - 12:00 PM and 1:00 PM - 5:00 PM",
+              "<b>Saturday</b>: Closed",
+              "<b>Sunday</b>: Closed"
+            ]
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [-77.6021536, 43.1693106,]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "name": "<b>Name</b>: Lewis Pediatrics ",
+            "address": "<b>Address</b>: 880 Westfall Rd STE E, Rochester, NY 14618",
+            "insurance": "<b>Insurance</b>: Aetna, Blue Cross/Blue Shield, Child Health Plus, Cigna, Fidelis, Molina Healthcare, MVP Healthcare, Tricare, United Healthcare, and many more",
+            "cost": "<b>Approximate Cost Without Insurance</b>: $30 – $75+",
+            "destination": "<b>Destination</b>: N/A",
+            "rating": "<b>Rating</b>: 5.0/5",
+            "phone": "<b>Phone</b>: 585.442.1421",
+            "hour": "<b>Hours</b>:",
+            "hours": [
+              "<b>Monday</b>: 8:30 AM - 5:00 PM ",
+              "<b>Tuesday</b>: 8:00 AM - 12:00 PM and 1:00 PM - 5:00 PM",
+              "<b>Wednesday</b>: 8:00 AM - 12:00 PM and 1:00 PM - 5:00 PM",
+              "<b>Thursday</b>: 8:00 AM - 12:00 PM and 1:00 PM - 5:00 PM",
+              "<b>Friday</b>: 8:00 AM - 12:00 PM and 1:00 PM - 5:00 PM",
+              "<b>Saturday</b>: Closed",
+              "<b>Sunday</b>: Closed"
+            ]
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [-77.5989031, 43.1158622]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "name": "<b>Name</b>: Wegmans Pharmacies ",
+            "address": "<b>Address</b>: 1750 East Ave, Rochester, NY 14610",
+            "insurance": "<b>Insurance</b>: Aetna, Blue Cross/Blue Shield, Child Health Plus, Cigna, Fidelis, Molina Healthcare, MVP Healthcare, Tricare, United Healthcare, and many more",
+            "cost": "<b>Approximate Cost Without Insurance</b>: $30 – $75+",
+            "destination": "<b>Destination</b>: N/A",
+            "rating": "<b>Rating</b>: 5.0/5",
+            "phone": "<b>Phone</b>: 585.442.1421",
+            "hour": "<b>Hours</b>:",
+            "hours": [
+              "<b>Monday</b>: 8:30 AM - 5:00 PM ",
+              "<b>Tuesday</b>: 8:00 AM - 12:00 PM and 1:00 PM - 5:00 PM",
+              "<b>Wednesday</b>: 8:00 AM - 12:00 PM and 1:00 PM - 5:00 PM",
+              "<b>Thursday</b>: 8:00 AM - 12:00 PM and 1:00 PM - 5:00 PM",
+              "<b>Friday</b>: 8:00 AM - 12:00 PM and 1:00 PM - 5:00 PM",
+              "<b>Saturday</b>: Closed",
+              "<b>Sunday</b>: Closed"
+            ]
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [-77.5561948, 43.1463632]
+          }
+        }
+      ]
+    };
 
-<script>
+    // ---------- Initialize Map ----------
+    const map = L.map('map').setView([43.15, -77.61], 12);
 
-// ---------- Your GeoJSON Data ----------
-const geojsonData = {
-  "type": "FeatureCollection",
-  "features": [
-    {"type":"Feature","properties":{"location":"Dekalb Ave & Flatbush Ave"},"geometry":{"type":"Point","coordinates":[-73.98109555019138,40.68985092532933]}},
-    {"type":"Feature","properties":{"location":"Grahan Ave & Metropolitan Ave"},"geometry":{"type":"Point","coordinates":[-73.94451215478905,40.71471230203185]}},
-    {"type":"Feature","properties":{"location":"Kings Hwy & E. 15th St"},"geometry":{"type":"Point","coordinates":[-73.95815283488757,40.60888029893385]}},
-    {"type":"Feature","properties":{"location":"4th Ave & 36th St"},"geometry":{"type":"Point","coordinates":[-74.00418544571221,40.654290631076414]}},
-    {"type":"Feature","properties":{"location":"Surf Ave & Stillwell Ave"},"geometry":{"type":"Point","coordinates":[-73.98049489893239,40.57567391264483]}},
-    {"type":"Feature","properties":{"location":"E. Kingbridge Rd & Briggs Ave"},"geometry":{"type":"Point","coordinates":[-73.89429103041087,40.86297019613109]}},
-    {"type":"Feature","properties":{"location":"Grand Concourse & E.Tremont Ave"},"geometry":{"type":"Point","coordinates":[-73.90601188067646,40.849842862422626]}},
-    {"type":"Feature","properties":{"location":"E. 17th St & Broadway"},"geometry":{"type":"Point","coordinates":[-73.989978555,40.73701791033392]}},
-    {"type":"Feature","properties":{"location":"W. 23rd St & 6th Ave"},"geometry":{"type":"Point","coordinates":[-73.99256188367652,40.742698515904735]}},
-    {"type":"Feature","properties":{"location":"W. 23rd St & 8th Ave"},"geometry":{"type":"Point","coordinates":[-73.99808717183724,40.74522816999436]}},
-    {"type":"Feature","properties":{"location":"Rutgers St & East Broadway"},"geometry":{"type":"Point","coordinates":[-73.99009279896514,40.71379174465101]}},
-    {"type":"Feature","properties":{"location":"Jackson Ave & 50th Ave"},"geometry":{"type":"Point","coordinates":[-73.95218731600916,40.742658633047895]}},
-    {"type":"Feature","properties":{"location":"31st St & 30th Ave"},"geometry":{"type":"Point","coordinates":[-73.92150005764297,40.766572706970074]}},
-    {"type":"Feature","properties":{"location":"Lefferts Blvd & Liberty Ave"},"geometry":{"type":"Point","coordinates":[-73.82394086263547,40.68597530941907]}},
-    {"type":"Feature","properties":{"location":"71st Ave & Austin St"},"geometry":{"type":"Point","coordinates":[-73.84484203907775,40.719916586642114]}},
-    {"type":"Feature","properties":{"location":"Father Capodanno Blvd & Sand Lane"},"geometry":{"type":"Point","coordinates":[-74.0661975758172,40.5905069173068]}},
-    {"type":"Feature","properties":{"location":"Richmond Ave & Wainwright Ave"},"geometry":{"type":"Point","coordinates":[-74.17097248892372,40.56015795513925]}}
-  ]
-};
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+    }).addTo(map);
 
-// ---------- Initialize Map ----------
-const map = L.map('map').setView([40.7128, -74.0060], 11);
-
-// Free OpenStreetMap tiles
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  maxZoom: 19,
-}).addTo(map);
-
-// ---------- Add GeoJSON Points ----------
-L.geoJSON(geojsonData, {
-  pointToLayer: (feature, latlng) => {
-    return L.circleMarker(latlng, {
-      radius: 6,
-      color: "#f00",
-      fillColor: "#f00",
-      fillOpacity: 1
-    });
-  },
+    // ---------- Add GeoJSON Points ----------
+    L.geoJSON(geojsonData, {
+      pointToLayer: (feature, latlng) => {
+        return L.circleMarker(latlng, {
+          radius: 6,
+          color: "#000080",
+          fillColor: "#000080",
+          fillOpacity: 1
+        });
+      },
   onEachFeature: (feature, layer) => {
-    layer.bindPopup(feature.properties.location);
-  }
-}).addTo(map);
 
-// ---------- Geolocation Button ----------
-const locateBtn = L.control({position:'topright'});
-locateBtn.onAdd = function() {
-  const btn = L.DomUtil.create('button', 'btn');
-  btn.innerHTML = "📍 My Location";
-  btn.onclick = () => {
-    map.locate({setView:true, maxZoom:15});
-  };
-  return btn;
-};
-locateBtn.addTo(map);
+  const hoursList =
+    "<b>Hours</b>" +
+    "<ul>" +
+    feature.properties.hours.map(h => `<li>${h}</li>`).join("") +
+    "</ul>";
 
-// Show marker after location found
-map.on('locationfound', (e) => {
-  L.marker(e.latlng).addTo(map)
-    .bindPopup("You are here").openPopup();
-});
+  const popupContent =
+    feature.properties.name + "<br/>" +
+    feature.properties.address + "<br/>" +
+    feature.properties.insurance + "<br/>" +
+    feature.properties.cost + "<br/>" +
+    feature.properties.destination + "<br/>" +
+    feature.properties.rating + "<br/>" +
+    feature.properties.phone + "<br/>" +
+    hoursList +
+    "<button class='continue-btn'>Continue</button>";
 
-map.on('locationerror', () => {
-  alert("Unable to access your location.");
-});
+  layer.bindPopup(popupContent);
+}
+    }).addTo(map);
 
-</script>
+    // ---------- Geolocation Button ----------
+    const locateBtn = L.control({position:'topright'});
+    locateBtn.onAdd = function() {
+      const btn = L.DomUtil.create('button', 'btn');
+      btn.innerHTML = "📍 My Location";
+      btn.onclick = () => {
+        map.locate({setView:true, maxZoom:15});
+      };
+      return btn;
+    };
+    locateBtn.addTo(map);
+
+    map.on('locationfound', (e) => {
+      L.marker(e.latlng).addTo(map)
+        .bindPopup("You are here").openPopup();
+    });
+
+    map.on('locationerror', () => {
+      alert("Unable to access your location.");
+    });
+
+  </script>
 </body>
 </html>
-
