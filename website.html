@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html> 
 <head>
   <title>Rochester Vaccination Map</title>
   <meta charset="utf-8" />
@@ -77,6 +77,15 @@
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
   <script>
+
+    function distance(lat1, long1, lat2, long2){
+      const from = L.latLng(lat1,long1);
+      const to = L.latLng(lat2,long2);
+      const distanceMeter = from.distanceTo(to);
+      const distanceMiles = distanceMeter/1609.34;
+      return distanceMiles.toFixed(2); 
+    }
+
     // ---------- GeoJSON Data ----------
     const geojsonData = {
       "type": "FeatureCollection",
@@ -292,67 +301,53 @@
       ]
     };
 
-    // ---------- Initialize Map ----------
+    let userLoc = null;
     const map = L.map('map').setView([43.15, -77.61], 12);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-    }).addTo(map);
-
-    // ---------- Add GeoJSON Points ----------
-    L.geoJSON(geojsonData, {
-      pointToLayer: (feature, latlng) => {
-        return L.circleMarker(latlng, {
-          radius: 6,
-          color: "#000080",
-          fillColor: "#000080",
-          fillOpacity: 1
-        });
-      },
-  onEachFeature: (feature, layer) => {
-
-  const hoursList =
-    "<b>Hours</b>" +
-    "<ul>" +
-    feature.properties.hours.map(h => `<li>${h}</li>`).join("") +
-    "</ul>";
-
-  const popupContent =
-    feature.properties.name + "<br/>" +
-    feature.properties.address + "<br/>" +
-    feature.properties.insurance + "<br/>" +
-    feature.properties.cost + "<br/>" +
-    feature.properties.destination + "<br/>" +
-    feature.properties.rating + "<br/>" +
-    feature.properties.phone + "<br/>" +
-    hoursList +
-    "<button class='continue-btn'>Continue</button>";
-
-  layer.bindPopup(popupContent);
-}
-    }).addTo(map);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
 
     // ---------- Geolocation Button ----------
     const locateBtn = L.control({position:'topright'});
     locateBtn.onAdd = function() {
       const btn = L.DomUtil.create('button', 'btn');
-      btn.innerHTML = "📍 My Location";
-      btn.onclick = () => {
-        map.locate({setView:true, maxZoom:15});
-      };
+      btn.innerHTML = "My Location 📍";
+      btn.onclick = () => map.locate({setView:true, maxZoom:15});
       return btn;
     };
     locateBtn.addTo(map);
 
+    // ---------- Add GeoJSON Layer ----------
+    const geoLayer = L.geoJSON(geojsonData, {
+      pointToLayer: (feature, latlng) => L.circleMarker(latlng, { radius: 6, color: "#000080", fillColor: "#000080", fillOpacity: 1 }),
+      onEachFeature: (feature, layer) => {
+        layer.bindPopup("<b>Loading info...</b>");
+        layer.on('popupopen', function() {
+          let distanceT = userLoc ? distance(userLoc.lat, userLoc.lng, feature.geometry.coordinates[1], feature.geometry.coordinates[0]) + " miles" : "Click 📍 to calculate";
+          const hoursList = "<b>Hours</b>: <ul>" + feature.properties.hours.map(h => `<li>${h}</li>`).join("") + "</ul>";
+          const popupContent = feature.properties.name + "<br/>" +
+                               feature.properties.address + "<br/>" +
+                               feature.properties.insurance + "<br/>" +
+                               feature.properties.cost + "<br/>" +
+                               "<b>Distance</b>: " + distanceT + "<br/>" +
+                               feature.properties.destination + "<br/>" +
+                               feature.properties.rating + "<br/>" +
+                               feature.properties.phone + "<br/>" +
+                               hoursList +
+                               "<button class='continue-btn'>Continue</button>";
+          layer.setPopupContent(popupContent);
+        });
+      }
+    }).addTo(map);
+
     map.on('locationfound', (e) => {
-      L.marker(e.latlng).addTo(map)
-        .bindPopup("You are here").openPopup();
+      userLoc = e.latlng;
+      L.marker(e.latlng).addTo(map).bindPopup("You are here.").openPopup();
+
+      // Refresh all popups to show distance
+      geoLayer.eachLayer(layer => { if(layer.getPopup()) layer.fire('popupopen'); });
     });
 
-    map.on('locationerror', () => {
-      alert("Unable to access your location.");
-    });
-
+    map.on('locationerror', () => alert("Unable to access your location."));
   </script>
 </body>
 </html>
