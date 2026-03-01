@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Dr.Vile Chat!</title>
+
+<style>
+body {
+    font-family: "Segoe UI", Tahoma, sans-serif;
+    background: #f0f0f0;
+    margin: 0;
+}
+
+/* ===== Floating Open Button ===== */
+.open-chat-btn {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    padding: 12px 18px;
+    background: #7c5ac9;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* ===== Popup Container ===== */
+.popup {
+    display: none;
+    position: fixed;
+    bottom: 90px;
+    right: 25px;
+    width: 380px;
+    height: 600px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 6px 25px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Header */
+.popup-header {
+    background: #7c5ac9;
+    color: white;
+    padding: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+/* Chat Area */
+#chat {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+    background: #ffffff;
+}
+
+/* Messages */
+.message {
+    margin: 8px 0;
+    padding: 10px 15px;
+    border-radius: 15px;
+    max-width: 90%;
+    word-wrap: break-word;
+}
+
+.user-message {
+    background: #d7c1f0;
+    color: #3f2a6b;
+    align-self: flex-end;
+    text-align: right;
+}
+
+.ai-message {
+    background: #e7ebff;
+    color: #1a1a1a;
+    align-self: flex-start;
+}
+
+/* Input Area */
+#inputArea {
+    display: flex;
+    gap: 8px;
+    padding: 12px;
+    border-top: 1px solid #ddd;
+}
+
+#message {
+    flex: 1;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+#sendButton {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 8px;
+    background: #7c5ac9;
+    color: white;
+    cursor: pointer;
+}
+
+#sendButton:hover {
+    background: #5b3ea6;
+}
+
+#chat::-webkit-scrollbar {
+    width: 6px;
+}
+#chat::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+}
+</style>
+</head>
+<body>
+
+<!-- Floating Button -->
+<button class="open-chat-btn" onclick="toggleChat()">
+Open Chat!!
+</button>
+
+<!-- Popup -->
+<div class="popup" id="chatPopup">
+
+<div class="popup-header">
+<h3>Dr.Vile's Advice!</h3>
+<button class="close-btn" onclick="toggleChat()">✖</button>
+</div>
+
+<div id="chat"></div>
+
+<div id="inputArea">
+<input type="text" id="message" placeholder="How can I help you today?">
+<button id="sendButton">Send</button>
+</div>
+
+</div>
+
+<script>
+
+/* Toggle Popup */
+function toggleChat() {
+    const popup = document.getElementById("chatPopup");
+
+    if (popup.style.display === "none" || popup.style.display === "") {
+        popup.style.display = "flex";
+    } else {
+        popup.style.display = "none";
+    }
+}
+
+/* Format AI Text */
+function formatAIText(text) {
+    text = text.replace(/\*\*(.*?)\*\*/g, "<b>$1</b>");
+
+    let lines = text.split("\n");
+    let formatted = "";
+    let inList = false;
+
+    for (let line of lines) {
+        if (line.trim().startsWith("* ")) {
+            if (!inList) {
+                formatted += "<ul>";
+                inList = true;
+            }
+            formatted += "<li>" + line.trim().substring(2) + "</li>";
+        } else {
+            if (inList) {
+                formatted += "</ul>";
+                inList = false;
+            }
+            formatted += line + "<br>";
+        }
+    }
+
+    if (inList) formatted += "</ul>";
+
+    return formatted;
+}
+
+/* Send Message */
+async function sendMessage() {
+
+    const input = document.getElementById("message");
+    const message = input.value.trim();
+    if (!message) return;
+
+    const chatDiv = document.getElementById("chat");
+
+    // User message
+    const userDiv = document.createElement("div");
+    userDiv.className = "message user-message";
+    userDiv.innerHTML = message;
+    chatDiv.appendChild(userDiv);
+
+    input.value = "";
+    chatDiv.scrollTop = chatDiv.scrollHeight;
+
+    // AI Request
+    const res = await fetch("/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message })
+    });
+
+    const data = await res.json();
+    const formattedReply = formatAIText(data.reply);
+
+    const aiDiv = document.createElement("div");
+    aiDiv.className = "message ai-message";
+    aiDiv.innerHTML = formattedReply;
+    chatDiv.appendChild(aiDiv);
+
+    chatDiv.scrollTop = chatDiv.scrollHeight;
+}
+
+document.getElementById("sendButton").addEventListener("click", sendMessage);
+
+document.getElementById("message").addEventListener("keypress", function(e) {
+    if (e.key === "Enter") sendMessage();
+});
+
+</script>
+
+</body>
+</html>

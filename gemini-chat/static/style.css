@@ -1,0 +1,27 @@
+.ai-message {
+    background: #f4f6fb;
+    padding: 16px 18px;
+    border-radius: 14px;
+    margin: 12px 0;
+    max-width: 650px;
+    line-height: 1.6;
+    font-size: 15px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+/* headings inside response */
+.ai-message strong {
+    display: block;
+    margin-top: 12px;
+    font-size: 16px;
+}
+
+/* lists */
+.ai-message ul {
+    margin-top: 6px;
+    padding-left: 20px;
+}
+
+.ai-message li {
+    margin-bottom: 4px;
+}

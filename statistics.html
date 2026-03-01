@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Gemini Chatbox</title>
+  <style>
+    body { font-family: Arial; margin: 20px; }
+    #chat { border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: scroll; }
+    #input { width: 80%; }
+    #send { width: 15%; }
+    .user { color: blue; }
+    .bot { color: green; }
+  </style>
+</head>
+<body>
+
+<h2>Gemini Chat</h2>
+<div id="chat"></div>
+<input type="text" id="input" placeholder="Type your message">
+<button id="send">Send</button>
+
+<script>
+  const chat = document.getElementById('chat');
+  const input = document.getElementById('input');
+  const send = document.getElementById('send');
+
+  send.onclick = async () => {
+    const message = input.value;
+    if (!message) return;
+
+    chat.innerHTML += `<div class="user">You: ${message}</div>`;
+    input.value = '';
+
+    try {
+      const response = await fetch('http://localhost:3000/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message })
+      });
+
+      const data = await response.json();
+      const reply = data.reply || "No reply";
+
+      chat.innerHTML += `<div class="bot">Gemini: ${reply}</div>`;
+      chat.scrollTop = chat.scrollHeight;
+
+    } catch (err) {
+      chat.innerHTML += `<div class="bot">Error: ${err}</div>`;
+    }
+  };
+</script>
+
+</body>
+</html>

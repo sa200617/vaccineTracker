@@ -1,0 +1,87 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        
+        {
+            "name": "flutter",
+            "cwd": "Users/suhaniaggarwal/flutter",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "hello_flutter",
+            "cwd": "Users/suhaniaggarwal/hello_flutter",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "hello_flutter (profile mode)",
+            "cwd": "Users/suhaniaggarwal/hello_flutter",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "hello_flutter (release mode)",
+            "cwd": "Users/suhaniaggarwal/hello_flutter",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "my_app",
+            "cwd": "Users/suhaniaggarwal/my_app",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "my_app (profile mode)",
+            "cwd": "Users/suhaniaggarwal/my_app",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "my_app (release mode)",
+            "cwd": "Users/suhaniaggarwal/my_app",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "my_app-1",
+            "cwd": "Users/suhaniaggarwal/my_app-1",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "my_app-1 (profile mode)",
+            "cwd": "Users/suhaniaggarwal/my_app-1",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "my_app-1 (release mode)",
+            "cwd": "Users/suhaniaggarwal/my_app-1",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "flutter",
+            "cwd": "Users/suhaniaggarwal/Downloads/flutter",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "flutter 2",
+            "cwd": "Users/suhaniaggarwal/Downloads/flutter 2",
+            "request": "launch",
+            "type": "dart"
+        }
+    ]
+}
