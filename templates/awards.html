@@ -20,10 +20,7 @@
             padding: 20px;
             border-radius: 12px;
             box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-            position: relative;
         }
-
-        h2 { color: #3f2a6b; }
 
         .award-wrapper {
             position: relative;
@@ -32,10 +29,10 @@
 
         .award-img {
             max-width: 100%;
-            height: auto;
             display: block;
         }
 
+        /* WHITE TEXTBOX */
         .info-box {
             position: absolute;
             width: 260px;
@@ -62,99 +59,77 @@
     <h2>Your Vaccination Progress</h2>
 
     <div class="award-wrapper">
-
         <img src="images/awards.jpg" class="award-img">
 
+        <!-- WHITE TEXTBOX -->
         <div id="infoBox" class="info-box"></div>
-
     </div>
 
-    <img src="images/nextButton.png" class="next-btn"
+    <img src="images/nextButton.png"
+         class="next-btn"
          onclick="window.location.href='nextpage.html'">
 </div>
 
 <script>
 window.addEventListener("DOMContentLoaded", () => {
-
     const storedData = JSON.parse(localStorage.getItem("formData"));
 
     if (!storedData || !storedData.answers) {
-        alert("⚠ No saved form data found.\nFill out the form first.");
+        alert("⚠ No saved form data found. Fill out the form first.");
         return;
     }
-
-    /* vaccine names in same order as form selects */
-    const vaccineNames = [
-        "Flu Vaccine",
-        "COVID-19 Vaccine",
-        "Tetanus Booster",
-        "HPV Vaccine",
-        "MMR Vaccine"
-    ];
 
     let completed = 0;
     let needed = [];
 
     storedData.answers.forEach((ans, i) => {
-
-        ans = ans.toLowerCase();
+        const value = ans.answer.toLowerCase();
 
         if (
-            ans === "yes" ||
-            ans === "completed" ||
-            ans === "within 10 years" ||
-            ans === "2 doses"
+            value === "yes" ||
+            value === "completed" ||
+            value === "2 doses" ||
+            value === "within 10 years"
         ) {
             completed++;
-        }
-        else if (ans !== "select" && ans !== "") {
-            needed.push(vaccineNames[i]);
+        } else if (value !== "select") {
+            needed.push("Vaccine " + (i + 1));
         }
     });
 
-    const percent = Math.round(
-        (completed / storedData.answers.length) * 100
-    );
-
+    const percent = Math.round((completed / storedData.answers.length) * 100);
     const box = document.getElementById("infoBox");
 
     box.innerHTML = `
-        <strong>Vaccination Level: ${percent}%</strong><br><br>
+        <strong>Vaccination Level: ${percent}%</strong>
+
+
         <strong>You may need:</strong>
         <ul>
-            ${
-                needed.length
-                ? needed.map(v => `<li>${v}</li>`).join("")
-                : "<li>You're fully protected 🎉</li>"
-            }
+            ${needed.length ? needed.map(v => `<li>${v}</li>`).join("") : "<li>You're fully protected 🎉</li>"}
         </ul>
     `;
 
     box.style.display = "block";
 
-    /* POSITION BOX NEXT TO VIALS */
-
+    /* POSITION NEXT TO EACH VIAL AREA */
+    /* tweak numbers based on your image layout */
     if (percent < 25) {
         box.style.left = "30px";
-        box.style.bottom = "30px";
-    }
-    else if (percent < 50) {
+        box.style.bottom = "40px";
+    } else if (percent < 50) {
         box.style.right = "30px";
         box.style.bottom = "120px";
-    }
-    else if (percent < 75) {
+    } else if (percent < 75) {
         box.style.left = "30px";
-        box.style.top = "200px";
-    }
-    else if (percent < 100) {
+        box.style.top = "180px";
+    } else if (percent < 100) {
         box.style.right = "30px";
         box.style.top = "120px";
-    }
-    else {
+    } else {
         box.style.left = "30px";
         box.style.top = "40px";
     }
-
 });
 </script>
 
