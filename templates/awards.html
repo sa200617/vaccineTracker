@@ -79,6 +79,25 @@
 
 <div class="container">
     <h2>Your Vaccination Progress</h2>
+    <button
+            onclick="window.location.href='../gemini-chat/templates/index.html'"
+            style="
+                position: fixed;
+                bottom: 30px;
+                right: 30px;
+                width: 65px;
+                height: 65px;
+                border-radius: 50%;
+                border: none;
+                background: #7c5ac9;
+                color: white;
+                font-size: 24px;
+                cursor: pointer;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+                z-index: 9999;
+            ">
+        🤖
+        </button>
 
     <div class="award-wrapper">
         <img src="images/awards.jpg" class="award-img">
@@ -185,6 +204,45 @@ window.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
+const vaccineQuestions = [
+    "mmr (measles, mumps, rubella)",
+    "polio",
+    "chickenpox (varicella)",
+    "hpv (recommended starting age 11-12)",
+    "meningococcal",
+    "annual flu vaccine",
+    "hepatitis b",
+    "tdap / td",
+    "flu vaccine",
+    "covid vaccine",
+    "pneumococcal",
+    "shingles (shingrix)",
+    "have you received the covid-19 vaccine",
+    "have you received the flu vaccine",
+    "have you received the pneumococcal vaccine",
+    "have you received the shingles vaccine",
+    "have you received the rsv vaccine",
+    "have you received the tdap / td booster"
+];
+
+const incompleteVaccines = [];
+const incompleteScreening = [];
+
+storedData.answers.forEach(ans => {
+    const q = (ans.question || "").toLowerCase().trim();
+    const value = (ans.answer || "").toLowerCase().trim();
+
+    const isIncomplete = value === "no" || value === "not started" || value === "partial" || value === "over 10 years" || value === "1 dose";
+
+    if (!isIncomplete) return;
+
+    if (vaccineQuestions.includes(q)) {
+        incompleteVaccines.push(ans.question);
+    } else {
+        incompleteScreening.push(ans.question);
+    }
+});
+
     let completed = 0;
     let needed = [];
     let messages = [];
@@ -227,6 +285,10 @@ window.addEventListener("DOMContentLoaded", () => {
     const box = document.getElementById("infoBox");
 
     const vaccineNeeded = needed.filter((q, i) => needed.indexOf(q) === i);
+    const incompleteAnswers = storedData.answers.filter(ans => {
+        const value = (ans.answer || "").toLowerCase().trim();
+        return value === "no" || value === "not started" || value === "partial" || value === "over 10 years" || value === "1 dose";
+    });
 
     let msgHTML = messages.map(m => `
         <div class="msg-item">
@@ -240,9 +302,10 @@ window.addEventListener("DOMContentLoaded", () => {
         <hr style="margin: 8px 0;">
         <strong>You may need:</strong>
         <ul>
-            ${vaccineNeeded.length
-                ? vaccineNeeded.map(v => `<li>${v}</li>`).join("")
-                : "<li>You're fully protected 🎉</li>"}
+            ${incompleteAnswers.length
+                ? incompleteAnswers.map(a => `<li>${a.question}</li>`).join("")
+                : "<li>You're fully protected 🎉</li>"
+            }
         </ul>
         <strong>Important Information:</strong>
         <div style="margin-top:6px;">

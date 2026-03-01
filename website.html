@@ -163,13 +163,25 @@ p {
 </head>
 <body>
   <h1>Where to get Vaccinated?</h1>
-  <div style="text-align:center; margin-top:15px;">
-  <button class="ai-btn" 
-          onclick="window.location.href='gemini-chat/templates/index.html'">
-    🤖 Ask AI
-  </button>
-</div>
-  
+  <button 
+    onclick="window.location.href='gemini-chat/templates/index.html'"
+    style="
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        border: none;
+        background: #7c5ac9;
+        color: white;
+        font-size: 26px;
+        cursor: pointer;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        z-index: 9999;
+    ">
+🤖
+</button>
 
   <p>
     Explore this interactive map, where you can find pharmacies and clinics in Rochester, NY 
@@ -661,6 +673,5 @@ p {
     <img src="images/crossBandaid.png" alt="Bandaid">
     <img src="images/crossBandaid.png" alt="Bandaid">
 </div>
-<script src="chat.js"></script>
 </body>
 </html>

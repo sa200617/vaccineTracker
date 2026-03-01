@@ -111,27 +111,8 @@
 
     </style>
 
-    <button class="open-chat-btn" onclick="toggleChat()">💬 Ask AI</button>
-
-    <!-- ===== Chat Popup ===== -->
-    <div class="popup" id="chatPopup">
-        <div class="popup-header">
-            <h3>Dr.Vile's Advice!</h3>
-            <button class="close-btn" onclick="toggleChat()">✖</button>
-        </div>
-        <div id="chat"></div>
-        <div id="inputArea">
-            <input type="text" id="message" placeholder="How can I help you today?">
-            <button id="sendButton">Send</button>
-        </div>
-    </div>
 
     <script>
-        /* Toggle Popup */
-        function toggleChat() {
-            const popup = document.getElementById("chatPopup");
-            popup.style.display = (popup.style.display === "flex") ? "none" : "flex";
-        }
 
         /* Show section function remains unchanged */
         function showSection() {
@@ -181,6 +162,25 @@
     <div class="container">
 
         <h2>Immunization Form</h2>
+        <button
+            onclick="window.location.href='../gemini-chat/templates/index.html'"
+            style="
+                position: fixed;
+                bottom: 30px;
+                right: 30px;
+                width: 65px;
+                height: 65px;
+                border-radius: 50%;
+                border: none;
+                background: #7c5ac9;
+                color: white;
+                font-size: 24px;
+                cursor: pointer;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+                z-index: 9999;
+            ">
+        🤖
+        </button>
 
         <label>Select your age group?</label>
         <select id="ageGroup" onchange="showSection()">
@@ -731,14 +731,6 @@ async function saveFormData() {
     localStorage.setItem("formData", JSON.stringify(formData));
 
     window.location.href = "awards.html";
-}
-</script>
-
-<button class="open-chat-btn" onclick="openChat()">💬 Ask AI</button>
-
-<script>
-function openChat() {
-    window.open("gemini-chat/templates/index", "_blank");
 }
 </script>
 
