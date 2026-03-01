@@ -1,189 +1,171 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>About Us - 3 W's of Immunization</title>
-<style>
+<title>DoseWise</title>
 
-/* ========================= */
-/* 🌸 BACKGROUND (KEPT SAME) */
-/* ========================= */
+<style>
 
 body {
     font-family: "Poppins", "Segoe UI", sans-serif;
-    background-color: #ffd6ec; /* ❗ kept your color */
-    padding: 60px 20px;
+    background-color: #ffd6ec;
     margin: 0;
+    padding: 30px;
     background-image: url("images/heartBandaid.png");
     background-repeat: repeat;
-    background-size: 200px 200px;
+    background-size: 180px 180px;
     text-align: center;
 }
 
-/* ========================= */
-/* 💕 CONTAINER UPGRADE */
-/* ========================= */
-
 .container {
-    max-width: 950px;
+    max-width: 900px;
     margin: auto;
     background: #fff0f8;
-    padding: 60px;
-    border-radius: 30px;
-    box-shadow: 0 20px 50px rgba(255, 105, 180, 0.25);
+    padding: 35px;
+    border-radius: 25px;
+    box-shadow: 0 15px 40px rgba(255,105,180,0.25);
     border: 3px solid #ffb6d9;
 }
 
-/* ========================= */
-/* 💖 HEADINGS (STRONGER + PRETTIER) */
-/* ========================= */
-
 h1 {
-    font-size: 48px;
+    font-size: 42px;
     font-weight: 900;
     color: #d63384;
-    margin-bottom: 10px;
+    margin: 10px 0;
     text-shadow: 2px 2px 0px #ff85c1;
 }
 
-h2 {
-    font-size: 24px;
-    color: #e754a6;
-    margin-bottom: 30px;
-    font-weight: 700;
+.features {
+    margin: 15px 0;
+}
+
+.feature-item {
+    display: inline-block;
+    background: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    margin: 5px;
+    border: 2px solid #ff85c1;
+    font-size: 14px;
+    font-weight: bold;
+    transition: 0.3s ease;
+    cursor: pointer;
+}
+
+.feature-item:hover {
+    background: #ff85c1;
+    color: white;
+    transform: scale(1.05);
 }
 
 h3 {
-    font-size: 20px;
+    font-size: 22px;
     color: #c21875;
-    margin-top: 40px;
-    font-weight: 700;
-    letter-spacing: 1px;
+    margin-top: 30px;
+    margin-bottom: 8px;
     border-bottom: 3px solid #ff85c1;
     display: inline-block;
-    padding-bottom: 5px;
+    padding-bottom: 4px;
 }
-
-/* ========================= */
-/* ✨ TEXT STYLE */
-/* ========================= */
 
 p {
-    font-size: 16px;
+    font-size: 16px;     
+    line-height: 1.9;    
     color: #5a2a42;
-    line-height: 1.9;
+    margin: 15px auto;
     max-width: 800px;
-    margin: 20px auto;
 }
-
-/* ========================= */
-/* 💕 IMAGE STYLE */
-/* ========================= */
-
-/* 💕 IMAGE CENTERED */
 
 .image-container {
+    margin: 20px 0;
+}
+
+.three-images {
     display: flex;
     justify-content: center;
-    margin-top: 20px;
-}
-
-img {
-    width: 320px;
-    border-radius: 25px;
-    border: 4px solid #ff4fa3;
-    box-shadow: 0 15px 35px rgba(255, 105, 180, 0.3);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-img:hover {
-    transform: scale(1.07);
-    box-shadow: 0 20px 45px rgba(255, 105, 180, 0.4);
-}
-
-/* ========================= */
-/* 💗 TEAM CARDS */
-/* ========================= */
-
-.team {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
+    gap: 25px;
     flex-wrap: wrap;
-    margin-top: 40px;
+    margin: 30px 0;
 }
 
-.team-card {
-    background: #ffffff;
-    padding: 25px;
-    border-radius: 25px;
-    width: 260px;
-    border: 3px solid #ff85c1;
-    box-shadow: 0 10px 25px rgba(255, 105, 180, 0.2);
+.three-images img {
+    width: 220px;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 20px;
+    border: 4px solid #ff85c1;
+    box-shadow: 0 10px 25px rgba(255,105,180,0.25);
     transition: 0.3s ease;
 }
 
-.team-card:hover {
-    transform: translateY(-8px);
-    background: #ffe1f0;
+.three-images img:hover {
+    transform: scale(1.08);
 }
 
-/* ========================= */
-/* 💖 BUTTON */
-/* ========================= */
-
-.button {
-    margin-top: 50px;
-}
-
-.button a {
-    background: linear-gradient(45deg, #ff1493, #ff85c1);
-    color: white;
-    padding: 15px 35px;
-    border-radius: 50px;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 17px;
-    box-shadow: 0 8px 20px rgba(255, 77, 160, 0.4);
+.image-container img {
+    width: 300px;
+    border-radius: 20px;
+    border: 4px solid #ff4fa3;
+    box-shadow: 0 10px 30px rgba(255,105,180,0.3);
     transition: 0.3s ease;
 }
 
-.button a:hover {
-    transform: scale(1.1);
-    background: linear-gradient(45deg, #ff007f, #ff4fa3);
+.image-container img:hover {
+    transform: scale(1.06);
 }
 
-/* ========================= */
-/* 📱 MOBILE RESPONSIVE */
-/* ========================= */
+.next-btn {
+    margin-top: 35px;
+}
+
+.next-btn img {
+    width: 300px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.next-btn img:hover {
+    transform: scale(1.08);
+}
 
 @media (max-width: 768px) {
 
     .container {
-        padding: 30px;
+        padding: 20px;
     }
 
     h1 {
-        font-size: 34px;
+        font-size: 30px;
     }
 
-    h2 {
-        font-size: 18px;
-    }
-
-    img {
-        width: 250px;
+    .image-container img {
+        width: 220px;
     }
 }
 
 </style>
-
 </head>
+
 <body>
 
 <div class="container">
 
 <h1>DoseWise</h1>
-<h2>3W’s of Getting Immunized + Women’s Health Awareness</h2>
+
+<div class="features">
+<div class="feature-item">✨ Vaccine Tracking</div>
+<div class="feature-item">💉 Immunization Map</div>
+<div class="feature-item">👩‍⚕️ Women’s Health</div>
+<div class="feature-item">📍 Nearby Clinics</div>
+<div class="feature-item">🎀 Organized & Easy</div>
+</div>
+
+<div class="three-images">
+
+    <img src="images/birthday.jpg" alt="Image 1">
+    <img src="images/garba.jpg" alt="Image 2">
+    <img src="templates/images/creators.jpg" alt="Image 3">
+
+</div>
 
 <h3>Our Mission</h3>
 <p>
@@ -194,66 +176,44 @@ vaccines you may still need — because taking care of your health should be eas
 clear, and stress-free.
 </p>
 
-<section>
-
 <h3>The Two Girls Behind the Platform</h3>
-
-<div class="flex-section">
-    <img src="templates/images/creators.jpg" alt="Creators Image">
-    
-    <div class="text-block">
-        <p>
-        Together, from freshman year we have been reminding each other how to stay on top of stuff! 
-        Here is us extending that friendship to you! Suhani is a 2nd year CS Major at RIT, making 
-        creative DIY gifts for everyone around her despite GradeScope telling her to stop. 
-        Sahasra is a 2nd year CS Major at RIT, always taking pictures of her friend — even if she 
-        gets 2 photos of herself. 💕
-        <br><br>
-        Immerse yourself in our quirky website — Suhani and Sahasra’s gift to you!
-        </p>
-    </div>
-</div>
-
-</section>
-
-
-
+<p>
+Together, from freshman year we have been reminding each other how to stay on top of stuff! 
+Here is us extending that friendship to you! Suhani is a 2nd year CS Major at RIT, making 
+creative DIY gifts for everyone around her despite GradeScope telling her to stop. 
+Sahasra is a 2nd year CS Major at RIT, always taking pictures of her friend — even if she 
+gets 2 photos of herself. 
+<br><br>
+Immerse yourself in our quirky website — Suhani and Sahasra’s gift to you!
+</p>
 
 <h3>What We Do</h3>
 <p>
 Welcome to the <strong>3 W’s of Getting Immunized</strong> platform.
 Our goal is to help individuals stay informed and proactive about their vaccination 
 health by making it easier to understand what vaccines they need, when they need them,
-and why they are important.Many people struggle to keep track of booster shots, 
+and why they are important. Many people struggle to keep track of booster shots, 
 updated vaccine recommendations, and age-based requirements, so we created this platform to 
-organize that information in one simple and accessible place. By guiding users through personalized 
-questions based on their age and health status, we aim to provide clearer insight into their 
-immunization progress and any vaccines they may still need. We have a girly pop,
-design to make the design enjoyablable, and pretty duh! Additionally, we have
-a vaccination map, guiding users to nearby vaccination centers and clinics, making it easier to 
-find where they can get vaccinated and levels so they move up! 
+organize that information in one simple and accessible place.
 
-In addition to vaccination tracking, we also focus on women’s health awareness by including questions
-and information related to menstrual health, reproductive health, and preventive screenings.
-Understanding how hormonal changes, reproductive health, and overall wellness connect to medical care is important 
-for long-term health. Our platform is designed to encourage awareness, education, and prevention so individuals 
-feel more confident managing their health. Overall, our mission is to make health tracking more organized, understandable, 
-and accessible for everyone. AS AN ADULT YOU ARE IN CHARGE OF YOUR HEALTH, AND WE WANT TO HELP YOU TAKE CONTROL OF IT!
+We have a girly pop design to make the experience enjoyable and pretty duh! 
+Additionally, we have a vaccination map guiding users to nearby vaccination centers 
+and clinics so they can easily find places to get vaccinated.
 
-
+In addition to vaccination tracking, we also focus on women’s health awareness 
+by including questions and information related to menstrual health, reproductive health, 
+and preventive screenings. Our mission is to make health tracking organized, 
+understandable, and accessible for everyone.
 </p>
 
+<p style="font-weight:bold; font-size:18px;">
+AS AN ADULT YOU ARE IN CHARGE OF YOUR HEALTH — AND WE WANT TO HELP YOU TAKE CONTROL 💖
+</p>
 
-
-</div>
-
-<div style="text-align:center; margin-top:28px;">
-    <a href="templates/form.html">
-        <img src="images/nextButton.png"
-             class="next-btn"
-             alt="Next"
-             style="width:470px; cursor:pointer;">
-    </a>
+<div class="next-btn">
+<a href="templates/form.html">
+<img src="images/nextButton.png">
+</a>
 </div>
 
 </div>

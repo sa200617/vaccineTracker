@@ -698,38 +698,50 @@
 </div>
 
 <script>
-async function saveFormData() {
-
-    const ageGroup = document.getElementById("ageGroup").value;
-
+function saveFormData() {
+    const ageGroup = document.getElementById("ageGroup").value.trim();
     if (!ageGroup) {
         alert("Please select an age group first!");
         return;
     }
 
-    const selects = document.querySelectorAll(".section select");
+    // Collect all visible select answers
+    const answers = [];
+    const sections = document.querySelectorAll(".section");
 
-    let answers = [];
-
-    selects.forEach((sel) => {
-
-        const label = sel.previousElementSibling?.innerText || "Unknown";
-
-        answers.push({
-            question: label,
-            answer: sel.value
-        });
+    sections.forEach(section => {
+        // Only process visible sections
+        if (section.style.display !== "none") {
+            const selects = section.querySelectorAll("select");
+            selects.forEach(sel => {
+                const questionLabel = sel.previousElementSibling?.innerText || "Unknown";
+                const answerValue = sel.value.trim();
+                if (answerValue && answerValue.toLowerCase() !== "select") {
+                    answers.push({
+                        question: questionLabel,
+                        answer: answerValue
+                    });
+                }
+            });
+        }
     });
+
+    if (answers.length === 0) {
+        alert("Please answer at least one question before proceeding.");
+        return;
+    }
 
     const formData = {
         age: ageGroup,
         answers: answers
     };
 
-    console.log("Saving:", formData);
+    console.log("Saving formData:", formData); // debug log
 
+    // Save to localStorage
     localStorage.setItem("formData", JSON.stringify(formData));
 
+    // Redirect to awards page
     window.location.href = "awards.html";
 }
 </script>

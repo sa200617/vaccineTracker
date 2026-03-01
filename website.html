@@ -5,163 +5,136 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 <style>
+
+/* ============================= */
+/* 💕 FULL GIRLY POP STYLE */
+/* ============================= */
+
 body {
-  font-family: 'Segoe UI', Tahoma, sans-serif;
-  background: #faf6ff; /* very light lavender */
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  background: #ffd6ec;
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
 }
+
+/* ===== TITLE ===== */
 
 h1 {
-  font-family: 'Georgia', serif;
   text-align: center;
-  font-size: 42px;
-  color: #5a3d8a;
-  background: linear-gradient(to right, #cfbdf5, #cfbdf5);
-  padding: 15px 10px;
+  font-size: 48px;
+  font-weight: bold;
+  color: #ff2e88;
+  padding: 20px;
   margin: 0;
-  border-radius: 0 0 20px 20px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  text-shadow: 3px 3px 0px #ff85c1;
 }
 
+/* ===== PARAGRAPH BOX ===== */
+
 p {
-  font-family: 'Georgia', serif;
   font-size: 16px;
-  color: #5a3d8a;
-  padding: 16px 24px;
+  color: #5a2a42;
+  padding: 20px;
   margin: 20px auto;
   width: 90%;
-  text-align: justify;
-  line-height: 1.6;
-  background: #f4eeff;
-  border-left: 6px solid #e2d5ff;
-  border-radius: 0 12px 12px 0;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.03);
+  background: #fff0f8;
+  border-radius: 25px;
+  box-shadow: 0 8px 25px rgba(255, 105, 180, 0.2);
+  line-height: 1.8;
 }
+
+/* ===== MAP ===== */
 
 #map {
   height: 600px;
-  width: 95%;
-  margin: 20px auto 40px auto;
-  border: 2px solid #e2d5ff;
-  border-radius: 15px;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+  width: 90%;
+  margin: 40px auto;
+  border-radius: 30px;
+  border: 5px solid #ff85c1;
+  box-shadow: 0 15px 40px rgba(255, 77, 160, 0.3);
 }
 
-/* Popup */
-.leaflet-popup-content-wrapper {
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.08);
-  width: 350px;
-}
+/* ============================= */
+/* 💕 TOP & BOTTOM ROW OF X'S */
+/* ============================= */
 
-/* Buttons */
-.btn {
-  background: #f0e6ff;
-  color: #5a3d8a;
-  padding: 6px 14px;
-  border: 1px solid #e2d5ff;
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: bold;
-  border-radius: 20px;
-  transition: 0.3s;
-}
-
-.btn:hover {
-  background: #e2d5ff;
-  transform: scale(1.05);
-}
-
-.continue-btn {
-  display: block;
-  width: 100%;
-  background: #e2d5ff;
-  color: #5a3d8a;
-  border: none;
-  border-radius: 20px;
-  padding: 8px 0;
-  font-weight: bold;
-  margin-top: 10px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.continue-btn:hover {
-  background: #d8c4ff;
-  transform: scale(1.03);
-}
-
-/* Clinic Button */
-.clinic-btn {
-  display: inline-block;
-  background-color: #f0e6ff;
-  color: #5a3d8a;
-  padding: 10px 18px;
-  border-radius: 25px;
-  text-decoration: none;
-  font-weight: bold;
-  transition: 0.3s ease;
-}
-
-.clinic-btn:hover {
-  background-color: #e2d5ff;
-  transform: scale(1.05);
-}
-
-/* Mobile */
-@media (max-width: 768px){
-  #map { height: 500px; }
-  p { padding: 12px 16px; font-size: 15px; }
-  h1 { font-size: 32px; padding: 12px 8px; }
-}
-
-/* Bottom image row */
-.bandaid-row {
+.x-row {
   display: flex;
   justify-content: center;
-  gap: 25px;
-  padding: 20px 0 30px 0;
-  background: #f3ebff;
-  flex-wrap: wrap;
+  gap: 20px;
+  padding: 15px 0;
+  background: #fff0f8;
 }
 
-.bandaid-row img {
-  width: 60px;
-  height: auto;
-  opacity: 0.9;
-  transition: 0.3s;
+.x-row img {
+  width: 45px;
+  transition: 0.3s ease;
 }
 
-.bandaid-row img:hover {
-  transform: scale(1.2);
-  opacity: 1;
+.x-row img:hover {
+  transform: scale(1.2) rotate(10deg);
 }
-.ai-btn {
-  background: #bde0fe; /* dusty blue */
-  color: #2c2c54;
+
+/* ============================= */
+/* 💕 BUTTON STYLE */
+/* ============================= */
+
+button {
+  border-radius: 50px;
+  background: #7c5ac9;
+  color: white;
   border: none;
-  padding: 10px 22px;
-  font-size: 14px;
+  padding: 12px 20px;
   font-weight: bold;
-  border-radius: 25px;
   cursor: pointer;
   transition: 0.3s ease;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
 }
 
-.ai-btn:hover {
-  background: #a2d2ff;
-  transform: scale(1.08);
+button:hover {
+  background: #ff4fa3;
+  transform: scale(1.1);
 }
- 
+
+/* ============================= */
+/* 💕 MOBILE RESPONSIVE */
+/* ============================= */
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 32px;
+  }
+
+  #map {
+    height: 450px;
+  }
+}
+
 </style>
 </head>
 <body>
+<div class="x-row">
+  <img src="images/crossBandaid.png">
+  <img src="images/crossBandaid.png">
+  <img src="images/crossBandaid.png">
+  <img src="images/crossBandaid.png">
+  <img src="images/crossBandaid.png">
+  <img src="images/crossBandaid.png">
+  <img src="images/crossBandaid.png">
+  <img src="images/crossBandaid.png">
+  <img src="images/crossBandaid.png">
+  <img src="images/crossBandaid.png">
+   <img src="images/crossBandaid.png">
+  <img src="images/crossBandaid.png">
+  <img src="images/crossBandaid.png">
+  <img src="images/crossBandaid.png">
+  <img src="images/crossBandaid.png">
+  <img src="images/crossBandaid.png">
+  <img src="images/crossBandaid.png">
+  <img src="images/crossBandaid.png">
+</div>
   <h1>Where to get Vaccinated?</h1>
   <button 
     onclick="window.location.href='gemini-chat/templates/index.html'"
@@ -658,20 +631,25 @@ p {
     map.on('locationerror', () => alert("Unable to access your location."));
   </script>
 
- <div class="bandaid-row">
-    <img src="images/crossBandaid.png" alt="Bandaid">
-    <img src="images/crossBandaid.png" alt="Bandaid">
-    <img src="images/crossBandaid.png" alt="Bandaid">
-    <img src="images/crossBandaid.png" alt="Bandaid">
-    <img src="images/crossBandaid.png" alt="Bandaid">
-    <img src="images/crossBandaid.png" alt="Bandaid">
-    <img src="images/crossBandaid.png" alt="Bandaid">
-    <img src="images/crossBandaid.png" alt="Bandaid">
-    <img src="images/crossBandaid.png" alt="Bandaid">
-    <img src="images/crossBandaid.png" alt="Bandaid">
-    <img src="images/crossBandaid.png" alt="Bandaid">
-    <img src="images/crossBandaid.png" alt="Bandaid">
-    <img src="images/crossBandaid.png" alt="Bandaid">
+ 
+<div class="x-row">
+  <img src="images/crossBandaid.png">
+  <img src="images/crossBandaid.png">
+  <img src="images/crossBandaid.png">
+  <img src="images/crossBandaid.png">
+  <img src="images/crossBandaid.png">
+  <img src="images/crossBandaid.png">
+  <img src="images/crossBandaid.png">
+  <img src="images/crossBandaid.png">
+  <img src="images/crossBandaid.png">
+  <img src="images/crossBandaid.png">
+  <img src="images/crossBandaid.png">
+  <img src="images/crossBandaid.png">
+  <img src="images/crossBandaid.png">
+  <img src="images/crossBandaid.png">
+  <img src="images/crossBandaid.png">
+  <img src="images/crossBandaid.png">
 </div>
+
 </body>
 </html>

@@ -1,108 +1,90 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>Awards Page</title>
+<meta charset="UTF-8">
+<title>Awards Page</title>
 
-    <style>
-        body {
-            font-family: "Segoe UI", Tahoma, sans-serif;
-            background-color: #dfc4f0;
-            padding: 20px;
-            margin: 0;
-            text-align: center;
-        }
+<style>
+    body {
+        font-family: "Segoe UI", Tahoma, sans-serif;
+        background-color: #dfc4f0;
+        padding: 20px;
+        margin: 0;
+        text-align: center;
+    }
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: #efe7fb;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-        }
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+        background: #efe7fb;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        position: relative;
+    }
 
-        .award-wrapper {
-            position: relative;
-            display: inline-block;
-        }
+    .award-wrapper {
+        display: inline-block;
+        position: relative;
+    }
 
-        .award-img {
-            max-width: 100%;
-            display: block;
-        }
+    .award-img {
+        max-width: 100%;
+        display: block;
+    }
 
-        /* WHITE TEXTBOX */
-        .info-box {
-            position: absolute;
-            width: 280px;
-            background: white;
-            padding: 16px;
-            border-radius: 12px;
-            box-shadow: 0 6px 18px rgba(0,0,0,0.25);
-            text-align: left;
-            font-size: 13px;
-            display: none;
-            max-height: 420px;
-            overflow-y: auto;
-            line-height: 1.5;
-        }
+    /* WHITE INFO BOX */
+    .info-box {
+        position: fixed;       /* fixed to viewport */
+        left: 30px;            /* left side */
+        top: 50%;              /* vertical middle */
+        transform: translateY(-50%);
+        width: 300px;
+        background: white;
+        padding: 16px;
+        border-radius: 12px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+        text-align: left;
+        font-size: 13px;
+        max-height: 500px;
+        overflow-y: auto;
+        line-height: 1.5;
+        display: none;
+    }
 
-        .info-box ul {
-            padding-left: 16px;
-            margin: 6px 0;
-        }
+    .info-box ul {
+        padding-left: 16px;
+        margin: 6px 0;
+    }
 
-        .info-box ul li {
-            margin-bottom: 4px;
-        }
+    .info-box ul li {
+        margin-bottom: 4px;
+    }
 
-        .info-box .msg-item {
-            margin-bottom: 10px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
-        }
+    .info-box .msg-item {
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+    }
 
-        .info-box .msg-item:last-child {
-            border-bottom: none;
-        }
+    .info-box .msg-item:last-child {
+        border-bottom: none;
+    }
 
-        .next-btn {
-            margin-top: 20px;
-            cursor: pointer;
-            width: 200px;
-        }
-    </style>
+    .next-btn {
+        margin-top: 20px;
+        cursor: pointer;
+        width: 200px;
+    }
+</style>
 </head>
 
 <body>
-
 <div class="container">
     <h2>Your Vaccination Progress</h2>
-    <button
-            onclick="window.location.href='../gemini-chat/templates/index.html'"
-            style="
-                position: fixed;
-                bottom: 30px;
-                right: 30px;
-                width: 65px;
-                height: 65px;
-                border-radius: 50%;
-                border: none;
-                background: #7c5ac9;
-                color: white;
-                font-size: 24px;
-                cursor: pointer;
-                box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-                z-index: 9999;
-            ">
-        🤖
-        </button>
 
     <div class="award-wrapper">
         <img src="images/awards.jpg" class="award-img">
-
-        <!-- WHITE TEXTBOX -->
         <div id="infoBox" class="info-box"></div>
     </div>
 
@@ -112,228 +94,120 @@
 </div>
 
 <script>
-/* ─── NORMALIZER FUNCTION ───────────────────────────── */
+/* ─── NORMALIZER ───────────────────────────── */
 function normalize(str) {
     return str.toLowerCase().trim().replace(/[?.!]/g,'');
 }
 
-/* ─── MESSAGE MAP ───────────────────────────────────── */
+/* ─── MESSAGE MAP ──────────────────────────── */
 const vaccineMessages = {
     "mmr (measles, mumps, rubella)":
-        "Measles, mumps, and rubella are highly contagious diseases that can lead to severe complications. Schedule vaccination if not completed.",
+        "MMR vaccination prevents serious outbreaks of measles, mumps, and rubella.",
     "polio":
-        "Polio can cause paralysis. Complete the series for protection.",
+        "Polio vaccination protects against lifelong paralysis and severe complications.",
     "chickenpox (varicella)":
-        "Chickenpox may cause severe illness. Vaccination protects you.",
+        "Chickenpox vaccine prevents fever, blisters, and potential adult complications.",
     "hpv (recommended starting age 11-12)":
-        "HPV can cause cancers. Early vaccination maximizes protection.",
+        "HPV vaccination reduces risk of cervical and other HPV-related cancers.",
     "meningococcal":
-        "Meningococcal infections can be life-threatening. Vaccinate to reduce risk.",
+        "Meningococcal vaccine protects against life-threatening bacterial infections.",
     "annual flu vaccine":
-        "Seasonal flu can cause serious illness. Get your yearly flu shot.",
-    "are your menstrual cycles regular":
-        "Regular cycles indicate healthy reproductive function. Irregular cycles may signal underlying issues.",
-    "have you started hpv vaccination":
-        "HPV vaccines prevent cancers. Schedule first dose if not started.",
-    "have you experienced abnormal vaginal bleeding":
-        "Unexpected bleeding could indicate health issues. Seek medical evaluation.",
-    "do you experience urinary incontinence or frequent utis":
-        "Urinary symptoms may indicate underlying conditions. Consult a provider.",
+        "Flu vaccination reduces risk of seasonal influenza and severe illness.",
     "chickenpox":
-        "Chickenpox in adulthood can be severe. Vaccination is recommended.",
+        "Chickenpox vaccination in adulthood prevents severe illness.",
     "hepatitis b":
-        "Hepatitis B can cause liver disease. Complete vaccine series promptly.",
-    "hpv":
-        "HPV vaccination reduces risk of cancers. Complete the series if incomplete.",
-    "have you had a pap smear in the past 3 years":
-        "Pap smears screen for cervical cancer. Schedule if overdue.",
-    "are you currently pregnant or planning pregnancy":
-        "Vaccines may differ during pregnancy. Consult your provider.",
+        "Hepatitis B vaccine protects the liver from long-term disease.",
     "tdap / td":
-        "Tetanus, diphtheria, and pertussis boosters are important. Schedule if overdue.",
+        "Tdap/Td boosters prevent tetanus, diphtheria, and pertussis infections.",
     "flu vaccine":
-        "Annual flu vaccination protects against severe illness. Get your shot each year.",
+        "Annual flu shots lower risk of serious illness and complications.",
     "covid vaccine":
-        "COVID-19 vaccination reduces severe illness and hospitalization. Stay updated.",
-    "pregnancy status":
-        "Vaccination recommendations differ during pregnancy. Ensure safety with provider.",
-    "flu":
-        "Flu vaccination prevents serious illness, especially for older adults.",
-    "covid":
-        "COVID vaccination reduces risk of severe outcomes. Stay up-to-date.",
-    "tdap / td booster":
-        "Boosters prevent tetanus, diphtheria, and pertussis. Schedule if overdue.",
+        "COVID-19 vaccination reduces severe disease and hospitalization.",
     "pneumococcal":
-        "Prevents pneumonia and bloodstream infections. Critical for adults over 50.",
+        "Pneumococcal vaccine protects against pneumonia and bloodstream infections.",
     "shingles (shingrix)":
-        "Shingles can cause nerve pain. Receive both doses for full protection.",
+        "Shingles vaccine prevents painful nerve complications in older adults.",
+    "have you experienced abnormal vaginal bleeding":
+        "Unexpected bleeding may indicate health issues; medical evaluation is advised.",
+    "do you experience urinary incontinence or frequent utis":
+        "Urinary symptoms can indicate underlying conditions; early management helps.",
     "have you experienced any vaginal bleeding after menopause":
-        "Postmenopausal bleeding can indicate serious conditions. Seek evaluation.",
-    "do you have urinary incontinence or frequent utis":
-        "Urinary issues can affect quality of life. Early assessment helps.",
-    "have you had a mammogram in the past 2 years":
-        "Mammograms detect breast cancer early. Schedule if overdue.",
-    "have you received the covid-19 vaccine":
-        "Older adults are at higher risk for severe COVID-19. Stay current with boosters.",
-    "have you received the flu vaccine":
-        "Annual flu vaccination is crucial for seniors. Get your shot.",
-    "have you received the pneumococcal vaccine":
-        "Pneumonia and lung infections are more common in adults 65+. Vaccinate.",
-    "have you received the shingles vaccine":
-        "Shingles can cause nerve complications. Two doses recommended.",
-    "have you received the rsv vaccine":
-        "RSV can cause severe lung infections in seniors. Vaccination helps.",
-    "have you received the tdap / td booster":
-        "Maintain protection against tetanus, diphtheria, and pertussis every 10 years."
+        "Postmenopausal bleeding can indicate serious conditions; assessment is important.",
+    "have you had a pap smear in the past 3 years":
+        "Pap smears screen for cervical cancer and support early detection.",
+    "are your menstrual cycles regular":
+        "Regular cycles indicate healthy reproductive function.",
+    "pregnancy status":
+        "Vaccination recommendations may differ before or during pregnancy.",
 };
 
+/* ─── COMPLETE VALUES ───────────────────────── */
 const completeValues = ["yes", "completed", "2 doses", "within 10 years"];
-const symptomQuestions = [
-    "have you experienced abnormal vaginal bleeding",
-    "do you experience urinary incontinence or frequent utis",
-    "do you have urinary incontinence or frequent utis",
-    "have you experienced any vaginal bleeding after menopause"
-];
 
-/* ─── MAIN LOGIC ───────────────────────────────────── */
+/* ─── MAIN LOGIC ───────────────────────────── */
 window.addEventListener("DOMContentLoaded", () => {
     const storedData = JSON.parse(localStorage.getItem("formData"));
 
+    const box = document.getElementById("infoBox");
+
     if (!storedData || !storedData.answers) {
-        alert("⚠ No saved form data found. Fill out the form first.");
+        box.innerHTML = "<strong>⚠ No saved form data found. Fill out the form first.</strong>";
+        box.style.display = "block";
         return;
     }
 
-const vaccineQuestions = [
-    "mmr (measles, mumps, rubella)",
-    "polio",
-    "chickenpox (varicella)",
-    "hpv (recommended starting age 11-12)",
-    "meningococcal",
-    "annual flu vaccine",
-    "hepatitis b",
-    "tdap / td",
-    "flu vaccine",
-    "covid vaccine",
-    "pneumococcal",
-    "shingles (shingrix)",
-    "have you received the covid-19 vaccine",
-    "have you received the flu vaccine",
-    "have you received the pneumococcal vaccine",
-    "have you received the shingles vaccine",
-    "have you received the rsv vaccine",
-    "have you received the tdap / td booster"
-];
-
-const incompleteVaccines = [];
-const incompleteScreening = [];
-
-storedData.answers.forEach(ans => {
-    const q = (ans.question || "").toLowerCase().trim();
-    const value = (ans.answer || "").toLowerCase().trim();
-
-    const isIncomplete = value === "no" || value === "not started" || value === "partial" || value === "over 10 years" || value === "1 dose";
-
-    if (!isIncomplete) return;
-
-    if (vaccineQuestions.includes(q)) {
-        incompleteVaccines.push(ans.question);
-    } else {
-        incompleteScreening.push(ans.question);
-    }
-});
-
-    let completed = 0;
-    let needed = [];
-    let messages = [];
+    const incompleteVaccines = [];
+    const incompleteScreening = [];
 
     storedData.answers.forEach(ans => {
-        const rawQuestion = ans.question || "";
-        const rawAnswer = ans.answer || "";
-        const questionKey = normalize(rawQuestion);
-        const value = rawAnswer.toLowerCase().trim();
+        const q = (ans.question || "").toLowerCase().trim();
+        const value = (ans.answer || "").toLowerCase().trim();
 
-        if (!value || value === "select" || questionKey === "unknown") return;
+        const isIncomplete = value === "no" || value === "not started" || value === "partial" || value === "over 10 years" || value === "1 dose";
 
-        const isComplete = completeValues.some(cv => value === cv || value.includes(cv));
-        const isSymptomQ = symptomQuestions.includes(questionKey);
-        let needsAction = false;
+        if (!isIncomplete) return;
 
-        if (isSymptomQ) {
-            if (value === "yes") needsAction = true;
-            else completed++;
+        if (vaccineMessages[q]) {
+            incompleteVaccines.push(ans.question);
         } else {
-            if (isComplete) completed++;
-            else if (value !== "select" && value !== "") needsAction = true;
-        }
-
-        if (needsAction && vaccineMessages[questionKey]) {
-            needed.push(rawQuestion);
-            messages.push({
-                question: rawQuestion.length > 60 ? rawQuestion.substring(0, 60) + "..." : rawQuestion,
-                text: vaccineMessages[questionKey]
-            });
+            incompleteScreening.push(ans.question);
         }
     });
 
-    const total = storedData.answers.filter(a => {
+    const totalAnswered = storedData.answers.filter(a => {
         const v = (a.answer || "").toLowerCase();
         return v && v !== "select";
     }).length;
 
-    const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
-    const box = document.getElementById("infoBox");
+    const completed = totalAnswered - incompleteVaccines.length;
 
-    const vaccineNeeded = needed.filter((q, i) => needed.indexOf(q) === i);
-    const incompleteAnswers = storedData.answers.filter(ans => {
-        const value = (ans.answer || "").toLowerCase().trim();
-        return value === "no" || value === "not started" || value === "partial" || value === "over 10 years" || value === "1 dose";
-    });
+    const percent = totalAnswered > 0 ? Math.round((completed / totalAnswered) * 100) : 0;
 
-    let msgHTML = messages.map(m => `
-        <div class="msg-item">
-            <strong style="color:#5b3ea6; font-size:12px;">${m.question}</strong><br>
-            <span>${m.text}</span>
-        </div>
-    `).join("");
+    // Show vaccines in “You may need”
+    let vaccinesHTML = incompleteVaccines.length
+        ? incompleteVaccines.map(v => `<li>${v}</li>`).join("")
+        : "<li>You're fully protected 🎉</li>";
+
+    // Show screening messages
+    let screeningHTML = incompleteScreening.length
+        ? incompleteScreening.map(q => `<div class='msg-item'>${vaccineMessages[q.toLowerCase().trim()] || q}</div>`).join("")
+        : "<p>All vaccinations and health screenings are up to date.</p>";
 
     box.innerHTML = `
         <strong style="font-size:15px; color:#3f2a6b;">Vaccination Level: ${percent}%</strong>
         <hr style="margin: 8px 0;">
         <strong>You may need:</strong>
         <ul>
-            ${incompleteAnswers.length
-                ? incompleteAnswers.map(a => `<li>${a.question}</li>`).join("")
-                : "<li>You're fully protected 🎉</li>"
-            }
+            ${vaccinesHTML}
         </ul>
         <strong>Important Information:</strong>
         <div style="margin-top:6px;">
-            ${messages.length ? msgHTML : "<p>All vaccinations and health checks are up to date.</p>"}
+            ${screeningHTML}
         </div>
     `;
 
     box.style.display = "block";
-
-    /* POSITION BOX */
-    if (percent < 25) {
-        box.style.left = "30px";
-        box.style.bottom = "40px";
-    } else if (percent < 50) {
-        box.style.right = "30px";
-        box.style.bottom = "120px";
-    } else if (percent < 75) {
-        box.style.left = "30px";
-        box.style.top = "180px";
-    } else if (percent < 100) {
-        box.style.right = "30px";
-        box.style.top = "120px";
-    } else {
-        box.style.left = "30px";
-        box.style.top = "40px";
-    }
 });
 </script>
-
 </body>
 </html>
