@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>Awards Page</title>
+
     <style>
         body {
             font-family: "Segoe UI", Tahoma, sans-serif;
@@ -29,14 +30,13 @@
         .award-img {
             max-width: 100%;
             display: block;
-            border-radius: 12px;
         }
 
-        /* WHITE POPUP BOX */
+        /* WHITE TEXTBOX */
         .info-box {
             position: absolute;
-            width: 300px;
-            background: #fff8fc;
+            width: 280px;
+            background: white;
             padding: 16px;
             border-radius: 12px;
             box-shadow: 0 6px 18px rgba(0,0,0,0.25);
@@ -74,15 +74,16 @@
         }
     </style>
 </head>
+
 <body>
 
 <div class="container">
     <h2>Your Vaccination Progress</h2>
 
     <div class="award-wrapper">
-        <img src="images/awards.jpg" class="award-img" alt="Awards">
+        <img src="images/awards.jpg" class="award-img">
 
-        <!-- WHITE POPUP -->
+        <!-- WHITE TEXTBOX -->
         <div id="infoBox" class="info-box"></div>
     </div>
 
@@ -92,37 +93,90 @@
 </div>
 
 <script>
+/* ─── NORMALIZER FUNCTION ───────────────────────────── */
+function normalize(str) {
+    return str.toLowerCase().trim().replace(/[?.!]/g,'');
+}
+
+/* ─── MESSAGE MAP ───────────────────────────────────── */
 const vaccineMessages = {
-    "mmr (measles, mumps, rubella)": "Measles, mumps, and rubella are highly contagious and can cause serious complications. If you haven't had this vaccine, it's time to get protected!",
-    "polio": "Polio can cause permanent paralysis. Completing your vaccine series keeps you safe and helps protect others.",
-    "chickenpox (varicella)": "Chickenpox can lead to severe illness in teens. Vaccination prevents outbreaks and complications. Don't wait to get it!",
-    "hpv (recommended starting age 11-12)": "HPV vaccines prevent multiple cancers later in life. Early vaccination maximizes protection. Schedule your dose soon!",
-    "meningococcal": "Meningococcal infection can be life-threatening. Vaccinate to reduce your risk, especially in school or dorm settings.",
-    "annual flu vaccine": "Flu changes every year! Getting your shot protects you and everyone around you.",
-    "hepatitis b": "Hepatitis B can severely damage your liver. Complete your series for full protection.",
-    "tdap / td": "Tetanus, diphtheria, and pertussis are serious. Stay current with your booster for safety.",
-    "flu": "Flu can be dangerous, especially as you age. Get your annual shot!",
-    "covid": "COVID can cause severe illness. Keep up-to-date with vaccines to stay safe.",
-    "pneumococcal": "Pneumonia and infections are riskier with age. Vaccination is important for protection.",
-    "shingles (shingrix)": "Shingles can be painful and affect nerves. Two doses are recommended for full protection.",
-    "rsv": "RSV can cause serious lung infections in older adults. Vaccinate to stay safe.",
-    "are your menstrual cycles regular?": "Regular cycles indicate healthy hormones. Irregularities should be checked by your doctor.",
-    "have you started hpv vaccination?": "HPV vaccines prevent cancers. Starting early is best.",
-    "have you experienced abnormal vaginal bleeding?": "Unexpected bleeding may signal health issues. Consult your provider immediately.",
-    "do you experience urinary incontinence or frequent utis?": "Urinary symptoms can affect quality of life. Early management is important.",
-    "have you had a pap smear in the past 3 years?": "Pap smears screen for cervical cancer. Stay on schedule to catch issues early.",
-    "are you currently pregnant or planning pregnancy?": "Vaccines may need adjustment during pregnancy. Consult your doctor for safe options.",
-    "have you experienced any vaginal bleeding after menopause?": "Postmenopausal bleeding can indicate serious health issues. Contact your healthcare provider."
+    "mmr (measles, mumps, rubella)":
+        "Measles, mumps, and rubella are highly contagious diseases that can lead to severe complications. Schedule vaccination if not completed.",
+    "polio":
+        "Polio can cause paralysis. Complete the series for protection.",
+    "chickenpox (varicella)":
+        "Chickenpox may cause severe illness. Vaccination protects you.",
+    "hpv (recommended starting age 11-12)":
+        "HPV can cause cancers. Early vaccination maximizes protection.",
+    "meningococcal":
+        "Meningococcal infections can be life-threatening. Vaccinate to reduce risk.",
+    "annual flu vaccine":
+        "Seasonal flu can cause serious illness. Get your yearly flu shot.",
+    "are your menstrual cycles regular":
+        "Regular cycles indicate healthy reproductive function. Irregular cycles may signal underlying issues.",
+    "have you started hpv vaccination":
+        "HPV vaccines prevent cancers. Schedule first dose if not started.",
+    "have you experienced abnormal vaginal bleeding":
+        "Unexpected bleeding could indicate health issues. Seek medical evaluation.",
+    "do you experience urinary incontinence or frequent utis":
+        "Urinary symptoms may indicate underlying conditions. Consult a provider.",
+    "chickenpox":
+        "Chickenpox in adulthood can be severe. Vaccination is recommended.",
+    "hepatitis b":
+        "Hepatitis B can cause liver disease. Complete vaccine series promptly.",
+    "hpv":
+        "HPV vaccination reduces risk of cancers. Complete the series if incomplete.",
+    "have you had a pap smear in the past 3 years":
+        "Pap smears screen for cervical cancer. Schedule if overdue.",
+    "are you currently pregnant or planning pregnancy":
+        "Vaccines may differ during pregnancy. Consult your provider.",
+    "tdap / td":
+        "Tetanus, diphtheria, and pertussis boosters are important. Schedule if overdue.",
+    "flu vaccine":
+        "Annual flu vaccination protects against severe illness. Get your shot each year.",
+    "covid vaccine":
+        "COVID-19 vaccination reduces severe illness and hospitalization. Stay updated.",
+    "pregnancy status":
+        "Vaccination recommendations differ during pregnancy. Ensure safety with provider.",
+    "flu":
+        "Flu vaccination prevents serious illness, especially for older adults.",
+    "covid":
+        "COVID vaccination reduces risk of severe outcomes. Stay up-to-date.",
+    "tdap / td booster":
+        "Boosters prevent tetanus, diphtheria, and pertussis. Schedule if overdue.",
+    "pneumococcal":
+        "Prevents pneumonia and bloodstream infections. Critical for adults over 50.",
+    "shingles (shingrix)":
+        "Shingles can cause nerve pain. Receive both doses for full protection.",
+    "have you experienced any vaginal bleeding after menopause":
+        "Postmenopausal bleeding can indicate serious conditions. Seek evaluation.",
+    "do you have urinary incontinence or frequent utis":
+        "Urinary issues can affect quality of life. Early assessment helps.",
+    "have you had a mammogram in the past 2 years":
+        "Mammograms detect breast cancer early. Schedule if overdue.",
+    "have you received the covid-19 vaccine":
+        "Older adults are at higher risk for severe COVID-19. Stay current with boosters.",
+    "have you received the flu vaccine":
+        "Annual flu vaccination is crucial for seniors. Get your shot.",
+    "have you received the pneumococcal vaccine":
+        "Pneumonia and lung infections are more common in adults 65+. Vaccinate.",
+    "have you received the shingles vaccine":
+        "Shingles can cause nerve complications. Two doses recommended.",
+    "have you received the rsv vaccine":
+        "RSV can cause severe lung infections in seniors. Vaccination helps.",
+    "have you received the tdap / td booster":
+        "Maintain protection against tetanus, diphtheria, and pertussis every 10 years."
 };
 
-const completeValues = ["yes","completed","2 doses","within 10 years"];
+const completeValues = ["yes", "completed", "2 doses", "within 10 years"];
 const symptomQuestions = [
-    "have you experienced abnormal vaginal bleeding?",
-    "do you experience urinary incontinence or frequent utis?",
-    "do you have urinary incontinence or frequent utis?",
-    "have you experienced any vaginal bleeding after menopause?"
+    "have you experienced abnormal vaginal bleeding",
+    "do you experience urinary incontinence or frequent utis",
+    "do you have urinary incontinence or frequent utis",
+    "have you experienced any vaginal bleeding after menopause"
 ];
 
+/* ─── MAIN LOGIC ───────────────────────────────────── */
 window.addEventListener("DOMContentLoaded", () => {
     const storedData = JSON.parse(localStorage.getItem("formData"));
 
@@ -138,7 +192,7 @@ window.addEventListener("DOMContentLoaded", () => {
     storedData.answers.forEach(ans => {
         const rawQuestion = ans.question || "";
         const rawAnswer = ans.answer || "";
-        const questionKey = rawQuestion.toLowerCase().trim();
+        const questionKey = normalize(rawQuestion);
         const value = rawAnswer.toLowerCase().trim();
 
         if (!value || value === "select" || questionKey === "unknown") return;
@@ -152,20 +206,27 @@ window.addEventListener("DOMContentLoaded", () => {
             else completed++;
         } else {
             if (isComplete) completed++;
-            else needsAction = true;
+            else if (value !== "select" && value !== "") needsAction = true;
         }
 
-        if (needsAction) {
-            let msg = vaccineMessages[questionKey] || "Please check with your healthcare provider about this.";
+        if (needsAction && vaccineMessages[questionKey]) {
             needed.push(rawQuestion);
-            messages.push({ question: rawQuestion, text: msg });
+            messages.push({
+                question: rawQuestion.length > 60 ? rawQuestion.substring(0, 60) + "..." : rawQuestion,
+                text: vaccineMessages[questionKey]
+            });
         }
     });
 
-    const total = storedData.answers.filter(a => a.answer && a.answer.toLowerCase() !== "select").length;
-    const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
+    const total = storedData.answers.filter(a => {
+        const v = (a.answer || "").toLowerCase();
+        return v && v !== "select";
+    }).length;
 
+    const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
     const box = document.getElementById("infoBox");
+
+    const vaccineNeeded = needed.filter((q, i) => needed.indexOf(q) === i);
 
     let msgHTML = messages.map(m => `
         <div class="msg-item">
@@ -173,8 +234,6 @@ window.addEventListener("DOMContentLoaded", () => {
             <span>${m.text}</span>
         </div>
     `).join("");
-
-    const vaccineNeeded = needed.filter((q,i) => needed.indexOf(q) === i);
 
     box.innerHTML = `
         <strong style="font-size:15px; color:#3f2a6b;">Vaccination Level: ${percent}%</strong>
@@ -190,15 +249,28 @@ window.addEventListener("DOMContentLoaded", () => {
             ${messages.length ? msgHTML : "<p>All vaccinations and health checks are up to date.</p>"}
         </div>
     `;
+
     box.style.display = "block";
 
-    /* POSITION BOX CUTELY */
-    if(percent<25){box.style.left="30px"; box.style.bottom="40px";}
-    else if(percent<50){box.style.right="30px"; box.style.bottom="120px";}
-    else if(percent<75){box.style.left="30px"; box.style.top="180px";}
-    else if(percent<100){box.style.right="30px"; box.style.top="120px";}
-    else{box.style.left="30px"; box.style.top="40px";}
+    /* POSITION BOX */
+    if (percent < 25) {
+        box.style.left = "30px";
+        box.style.bottom = "40px";
+    } else if (percent < 50) {
+        box.style.right = "30px";
+        box.style.bottom = "120px";
+    } else if (percent < 75) {
+        box.style.left = "30px";
+        box.style.top = "180px";
+    } else if (percent < 100) {
+        box.style.right = "30px";
+        box.style.top = "120px";
+    } else {
+        box.style.left = "30px";
+        box.style.top = "40px";
+    }
 });
 </script>
+
 </body>
 </html>

@@ -111,6 +111,34 @@
 
     </style>
 
+    <button class="open-chat-btn" onclick="toggleChat()">💬 Ask AI</button>
+
+    <!-- ===== Chat Popup ===== -->
+    <div class="popup" id="chatPopup">
+        <div class="popup-header">
+            <h3>Dr.Vile's Advice!</h3>
+            <button class="close-btn" onclick="toggleChat()">✖</button>
+        </div>
+        <div id="chat"></div>
+        <div id="inputArea">
+            <input type="text" id="message" placeholder="How can I help you today?">
+            <button id="sendButton">Send</button>
+        </div>
+    </div>
+
+    <script>
+        /* Toggle Popup */
+        function toggleChat() {
+            const popup = document.getElementById("chatPopup");
+            popup.style.display = (popup.style.display === "flex") ? "none" : "flex";
+        }
+
+        /* Show section function remains unchanged */
+        function showSection() {
+            // Your existing logic to show/hide sections
+        }
+    </script>
+
     <script>
         function showSection() {
             let value = document.getElementById("ageGroup").value;
@@ -679,14 +707,16 @@ async function saveFormData() {
         return;
     }
 
-    // ONLY get selects inside sections
-    const sections = document.querySelectorAll(".section select");
+    const selects = document.querySelectorAll(".section select");
 
     let answers = [];
 
-    sections.forEach((sel) => {
+    selects.forEach((sel) => {
+
+        const label = sel.previousElementSibling?.innerText || "Unknown";
+
         answers.push({
-            question: sel.closest(".section")?.querySelector("h3")?.innerText || "Unknown",
+            question: label,
             answer: sel.value
         });
     });
@@ -698,16 +728,6 @@ async function saveFormData() {
 
     console.log("Saving:", formData);
 
-    try {
-        await fetch("/save-form", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(formData)
-        });
-    } catch (err) {
-        console.warn("Fetch failed (likely no server). Continuing anyway.", err);
-    }
-
     localStorage.setItem("formData", JSON.stringify(formData));
 
     window.location.href = "awards.html";
@@ -718,7 +738,7 @@ async function saveFormData() {
 
 <script>
 function openChat() {
-    window.open("gemini-chat/templates/index.html", "_blank");
+    window.open("gemini-chat/templates/index", "_blank");
 }
 </script>
 

@@ -1,35 +1,45 @@
-import os
-from flask import Flask, render_template, request, jsonify
-from dotenv import load_dotenv
-from google import genai
+const express = require("express");
+const cors = require("cors");
+const fetch = require("node-fetch");
 
-load_dotenv()
+const app = express();
+app.use(cors());
+app.use(express.json());
 
-api_key = os.getenv("GEMINI_API_KEY")
+const API_KEY = "AIzaSyBKuG2Fiu-RmxdVXdDXuLsYdVEu_bu8fcQ";
 
-client = genai.Client(api_key=api_key)
+app.post("/chat", async (req, res) => {
 
-app = Flask(__name__)
+    const userMessage = req.body.message;
 
-@app.route("/")
-def home():
-    return render_template("index.html")
+    try {
 
-@app.route("/chat", methods=["POST"])
-def chat():
-    data = request.json
-    user_message = data.get("message")
+        const response = await fetch(
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + API_KEY,
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    contents: [{
+                        parts: [{ text: userMessage }]
+                    }]
+                })
+            }
+        );
 
-    try:
-        response = client.models.generate_content(
-            model="gemini-2.5-flash",
-            contents=user_message
-        )
+        const data = await response.json();
 
-        return jsonify({"reply": response.text})
+        const reply =
+            data?.candidates?.[0]?.content?.parts?.[0]?.text
+            || "AI failed.";
 
-    except Exception as e:
-        return jsonify({"reply": str(e)})
+        res.json({ reply });
 
-if __name__ == "__main__":
-    app.run(debug=True)
+    } catch (err) {
+        res.json({ reply: "Server error." });
+    }
+});
+
+app.listen(3000, () => {
+    console.log("Server running on http://localhost:3000");
+});
