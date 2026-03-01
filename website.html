@@ -59,7 +59,7 @@
     box-shadow: 0 6px 15px rgba(0,0,0,0.2);
     padding: 0;
     overflow: hidden;
-    width: 250px;
+    width: 350px;
   }
 
   .popup-header {
@@ -133,6 +133,22 @@
     p { padding: 12px 16px; font-size: 15px; }
     h1 { font-size: 32px; padding: 12px 8px; }
   }
+
+  .clinic-btn {
+  display: inline-block;
+  background-color: #ff4d6d;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.3s ease;
+}
+
+.clinic-btn:hover {
+  background-color: #e63950;
+  transform: scale(1.05);
+}
 </style>
 </head>
 <body>
@@ -377,6 +393,151 @@
         }
       ]
     };
+    function showBookingSteps(clinicName) {
+
+      const cleanName = clinicName.replace(/\s+/g, '');
+      const stepsDiv = document.getElementById("steps-" + cleanName);
+
+      if (!stepsDiv) return;
+
+      let content = "";
+
+      // ---------------- CVS ----------------
+      if (clinicName === "CVS Pharmacy") {
+
+        content = `
+          <div style="background:#f3e6ff; padding:10px; border-radius:10px;">
+            <b>CVS Booking Steps 💜</b><br><br>
+            1. Visit cvs.com/minuteclinic<br>
+            2. Click “Schedule a Vaccine”<br>
+            3. Log in or create account<br>
+            4. Choose time & location<br>
+            5. Bring insurance + ID<br><br>
+
+            <a href="https://www.cvs.com/minuteclinic"
+              target="_blank"
+              class="clinic-btn">
+              Book at MinuteClinic 💉
+            </a>
+          </div>
+        `;
+      }
+
+      // ---------------- WALGREENS ----------------
+      else if (clinicName === "Walgreens Pharmacy") {
+
+        content = `
+          <div style="background:#fce4ec; padding:10px; border-radius:10px;">
+            <b>Walgreens Booking Steps 💕</b><br><br>
+            1. Go to walgreens.com/schedule-vaccine<br>
+            2. Search Location<br>
+            3. Pick Date & Time<br>
+            4. Confirm Appointment<br><br>
+
+            <a href="https://www.walgreens.com/topic/pharmacy/scheduler.jsp"
+              target="_blank"
+              class="clinic-btn">
+              Book at Walgreens 💉
+            </a>
+          </div>
+        `;
+      }
+
+      // ---------------- TRILLIUM ----------------
+      else if (clinicName === "Trillium Health Pharmacy") {
+        content = `
+          <div style="background:#fff3cd; padding:10px; border-radius:10px;">
+            <b>Trillium Booking 💛</b><br><br>
+            1. Call 585-545-7200<br>
+            2. Ask about vaccine availability<br>
+            3. Schedule appointment<br><br>
+
+            <b>Phone:</b> 585-545-7200
+          </div>
+        `;
+      }
+
+      // ---------------- ALEXANDER ----------------
+      else if (clinicName === "Alexander Pharmacy") {
+        content = `
+          <div style="background:#e6f7ff; padding:10px; border-radius:10px;">
+            <b>Alexander Booking 💙</b><br><br>
+            1. Call 585-262-3760<br>
+            2. Request vaccine appointment<br>
+            3. Confirm time<br><br>
+
+            <b>Phone:</b> 585-262-3760
+          </div>
+        `;
+      }
+
+      // ---------------- ROCHESTER CARE ----------------
+      else if (clinicName === "Rochester Care Pharmacy") {
+        content = `
+          <div style="background:#e6ffe6; padding:10px; border-radius:10px;">
+            <b>Rochester Care Booking 💚</b><br><br>
+            1. Call 585-719-1932<br>
+            2. Ask about vaccine availability<br>
+            3. Schedule appointment<br><br>
+
+            <b>Phone:</b> 585-719-1932
+          </div>
+        `;
+      }
+
+      // ---------------- JORDAN HEALTH ----------------
+      else if (clinicName === "Jordan Health Pharmacy") {
+        content = `
+          <div style="background:#ffe6f7; padding:10px; border-radius:10px;">
+            <b>Jordan Health Booking 💖</b><br><br>
+            1. Call their main office<br>
+            2. Request vaccine appointment<br>
+            3. Confirm visit time<br>
+          </div>
+        `;
+      }
+
+      // ---------------- LEWIS PEDIATRICS ----------------
+      else if (clinicName === "Lewis Pediatrics") {
+        content = `
+          <div style="background:#e6e6ff; padding:10px; border-radius:10px;">
+            <b>Lewis Pediatrics Booking 🩵</b><br><br>
+            1. Call 585-442-1421<br>
+            2. Ask about immunization appointment<br>
+            3. Confirm time<br><br>
+
+            <b>Phone:</b> 585-442-1421
+          </div>
+        `;
+      }
+
+      // ---------------- WEGMANS ----------------
+      else if (clinicName === "Wegmans Pharmacies") {
+        content = `
+          <div style="background:#fff0e6; padding:10px; border-radius:10px;">
+            <b>Wegmans Booking 🧡</b><br><br>
+            1. Visit wegmans.com/pharmacy<br>
+            2. Select location<br>
+            3. Schedule vaccine appointment<br>
+          </div>
+        `;
+      }
+
+      // ---------------- DEFAULT ----------------
+      else {
+        content = `
+          <div style="background:#fff0f5; padding:10px; border-radius:10px;">
+            <b>Booking Information</b><br><br>
+            Please call the clinic or visit their website to book.
+          </div>
+        `;
+      }
+
+      stepsDiv.style.display = "block";
+      stepsDiv.innerHTML = content;
+    }
+
+
 
     let userLoc = null;
     const map = L.map('map').setView([43.15, -77.61], 12);
@@ -395,26 +556,62 @@
 
     // ---------- Add GeoJSON Layer ----------
     const geoLayer = L.geoJSON(geojsonData, {
-      pointToLayer: (feature, latlng) => L.circleMarker(latlng, { radius: 6, color: "#000080", fillColor: "#000080", fillOpacity: 1 }),
-      onEachFeature: (feature, layer) => {
-        layer.bindPopup("<b>Loading info...</b>");
-        layer.on('popupopen', function() {
-          let distanceT = userLoc ? distance(userLoc.lat, userLoc.lng, feature.geometry.coordinates[1], feature.geometry.coordinates[0]) + " miles" : "Click 📍 to calculate";
-          const hoursList = "<b>Hours</b>: <ul>" + feature.properties.hours.map(h => `<li>${h}</li>`).join("") + "</ul>";
-          const popupContent = feature.properties.name + "<br/>" +
-                               feature.properties.address + "<br/>" +
-                               feature.properties.insurance + "<br/>" +
-                               feature.properties.cost + "<br/>" +
-                               "<b>Distance</b>: " + distanceT + "<br/>" +
-                               feature.properties.destination + "<br/>" +
-                               feature.properties.rating + "<br/>" +
-                               feature.properties.phone + "<br/>" +
-                               hoursList +
-                               "<button class='continue-btn'>Continue</button>";
-          layer.setPopupContent(popupContent);
-        });
-      }
-    }).addTo(map);
+  pointToLayer: (feature, latlng) =>
+    L.circleMarker(latlng, {
+      radius: 6,
+      color: "#000080",
+      fillColor: "#000080",
+      fillOpacity: 1
+    }),
+
+  onEachFeature: (feature, layer) => {
+    layer.bindPopup("<b>Loading info...</b>");
+
+    layer.on("popupopen", function () {
+
+      // Get clinic name safely
+      const clinicName = feature.properties.name
+        .replace("<b>Name</b>: ", "")
+        .trim();
+
+      // Distance calculation
+      let distanceT = userLoc
+        ? distance(
+            userLoc.lat,
+            userLoc.lng,
+            feature.geometry.coordinates[1],
+            feature.geometry.coordinates[0]
+          ) + " miles"
+        : "Click 📍 to calculate";
+
+      // Hours list
+      const hoursList =
+        "<b>Hours</b>: <ul>" +
+        feature.properties.hours
+          .map(h => `<li>${h}</li>`)
+          .join("") +
+        "</ul>";
+
+      // Popup content
+      const popupContent =
+        feature.properties.name + "<br/>" +
+        feature.properties.address + "<br/>" +
+        feature.properties.insurance + "<br/>" +
+        feature.properties.cost + "<br/>" +
+        "<b>Distance</b>: " + distanceT + "<br/>" +
+        feature.properties.destination + "<br/>" +
+        feature.properties.rating + "<br/>" +
+        feature.properties.phone + "<br/>" +
+        hoursList +
+        "<button class='continue-btn' onclick='showBookingSteps(\"" + clinicName + "\")'>Continue</button>" +
+        "<div class='booking-steps' id='steps-" +
+        clinicName.replace(/\s+/g, "") +
+        "' style='display:none; margin-top:10px;'></div>";
+
+      layer.setPopupContent(popupContent);
+    });
+  }
+}).addTo(map);
 
     map.on('locationfound', (e) => {
       userLoc = e.latlng;

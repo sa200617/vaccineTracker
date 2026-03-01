@@ -1,151 +1,191 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About Us</title>
-  <style>
-    body {
-      font-family: Georgia, sans-serif;
-      background-color: #DAE7F6; /* Same background color */
-      color: black; /* Text color */
+<title>About Us - 3 W's of Immunization</title>
+<style>
+
+  body {
+      font-family: "Poppins", "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, #ffd6ec, #ffe6f2);
+      padding: 60px 20px;
       margin: 0;
-      padding: 0;
-    }
-    header {
-      background-color: #040273; /* Same header color */
-      padding: 20px;
+      background-image: url("images/heartBandaid.png");
+      background-repeat: repeat;
+      background-size: 150px 150px;
+  }
+
+  .container {
+      max-width: 1000px;
+      margin: auto;
+      background: #ffffff;
+      padding: 50px;
+      border-radius: 30px;
+      box-shadow: 0 20px 50px rgba(255, 105, 180, 0.2);
       text-align: center;
-    }
-    header h1 {
-      margin: 0;
-      font-size: 2.5em;
-      color: white; /* Header text color */
-    }
-    .container {
-      padding: 20px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    .about-section {
-      margin-bottom: 30px;
-    }
-    .about-section h2 {
-      font-size: 2em;
-      color: #333;
+  }
+
+  /* Title */
+
+  h1 {
+      font-size: 48px;
+      background: linear-gradient(90deg, #ff4fa3, #ff85c1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
       margin-bottom: 10px;
-    }
-    .about-section p {
-      font-size: 1.2em;
-      line-height: 1.6;
-      color: black;
-    }
-    .about-section ul {
-      font-size: 1.2em;
-      line-height: 1.6;
-      color: black;
-    }
-    .team-section {
+  }
+
+  h2 {
+      color: #d63384;
+      font-size: 22px;
+      font-weight: 500;
+      margin-bottom: 30px;
+  }
+
+  h3 {
+      color: #c21875;
       margin-top: 40px;
-    }
-    .team-section h2 {
-      font-size: 2em;
-      color: #333;
-    }
-    .team-member {
+      font-size: 20px;
+  }
+
+  /* Paragraph Styling */
+
+  p {
+      font-size: 16px;
+      color: #5a2a42;
+      line-height: 1.9;
+      max-width: 800px;
+      margin: auto;
+  }
+
+  /* Image Styling */
+
+  img {
+      width: 320px;
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 10px 30px rgba(255, 105, 180, 0.25);
+      transition: transform 0.3s ease;
+  }
+
+  img:hover {
+      transform: scale(1.05);
+  }
+
+  /* Team Section */
+
+  .team {
       display: flex;
-      align-items: center;
-      margin-bottom: 20px;
-      background-color: #9bbcdb; /* Same card background color */
-      padding: 15px;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    }
-    .team-member img {
-      border-radius: 50%;
-      width: 80px;
-      height: 80px;
-      margin-right: 20px;
-    }
-    .team-member h3 {
-      font-size: 1.5em;
-      color: black;
-      margin: 0;
-    }
-    .team-member p {
-      font-size: 1.2em;
-      color: black;
-    }
-    footer {
-      background-color: #040273; /* Same footer color */
-      padding: 20px;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+      margin-top: 30px;
+  }
+
+  .team-card {
+      background: #fff5fa;
+      padding: 25px;
+      border-radius: 20px;
+      width: 250px;
+      border: 2px solid #ffb6d9;
+      box-shadow: 0 10px 20px rgba(255, 105, 180, 0.15);
+      transition: 0.3s ease;
+  }
+
+  .team-card:hover {
+      transform: translateY(-8px);
+      background: #ffe1f0;
+  }
+
+  .team-card h3 {
+      color: #ff4fa3;
+  }
+
+  /* Button */
+
+  .button {
+      margin-top: 50px;
+  }
+
+  .button a {
+      background: linear-gradient(45deg, #ff4fa3, #ff85c1);
       color: white;
-      text-align: center;
-    }
-  </style>
+      padding: 15px 35px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 16px;
+      box-shadow: 0 8px 20px rgba(255, 105, 180, 0.3);
+      transition: 0.3s ease;
+  }
+
+  .button a:hover {
+      transform: scale(1.08);
+      background: linear-gradient(45deg, #ff2e93, #ff6fb5);
+  }
+
+  @media (max-width: 768px) {
+      h1 { font-size: 34px; }
+      .container { padding: 30px; }
+  }
+
+</style>
+
 </head>
 <body>
-  <header>
-    <h1>About Us</h1>
-  </header>
 
-  <div class="container">
-    <!-- About Us Section -->
-    <div class="about-section">
-      <h2>Our Mission</h2>
-      <p>At [Organization Name], our mission is to provide accurate and accessible public health information, with a focus on improving the health and wellness of communities across the state. We strive to promote preventive measures, such as vaccination, to keep the population safe and healthy.</p>
-    </div>
+<div class="container">
 
-    <div class="about-section">
-      <h2>Our Vision</h2>
-      <p>We envision a future where everyone has access to the resources and education they need to make informed health decisions. Through collaboration with local communities, healthcare providers, and policymakers, we aim to create a healthier, more informed society.</p>
-    </div>
+<h1>DoseWise</h1>
+<h2>3W’s of Getting Immunized + Women’s Health Awareness</h2>
 
-    <div class="about-section">
-      <h2>Our Values</h2>
-      <ul>
-        <li><strong>Integrity:</strong> We are committed to honesty and transparency in everything we do.</li>
-        <li><strong>Community:</strong> We value the power of collaboration and strive to engage communities in their health decisions.</li>
-        <li><strong>Excellence:</strong> We are dedicated to providing high-quality, reliable information and services.</li>
-        <li><strong>Innovation:</strong> We embrace new technologies and approaches to meet the evolving needs of public health.</li>
-      </ul>
-    </div>
+<h3>Our Mission</h3>
+<p>
+Prevention is the new glow up! Our platform makes vaccine tracking simple, 
+interactive, and empowering so users can confidently stay ahead of their health.
+It helps you see where you stand in your vaccination journey and shows what 
+vaccines you may still need — because taking care of your health should be easy, 
+clear, and stress-free.
+</p>
 
-    <!-- Our Team Section -->
-    <div class="team-section">
-      <h2>Meet Our Team</h2>
-      
-      <div class="team-member">
-        <img src="https://via.placeholder.com/80" alt="Team Member 1">
-        <div>
-          <h3>Jane Doe</h3>
-          <p>Founder & CEO</p>
-          <p>Jane is passionate about public health and has over 15 years of experience in healthcare advocacy. She founded the organization with the goal of making health resources easily accessible to underserved communities.</p>
-        </div>
-      </div>
+<h3>The Two Girls Behind the Platform</h3>
+<img src="templates/images/creators.jpg" alt="Description of image" width="300">
 
-      <div class="team-member">
-        <img src="https://via.placeholder.com/80" alt="Team Member 2">
-        <div>
-          <h3>John Smith</h3>
-          <p>Public Health Director</p>
-          <p>John brings a wealth of knowledge in epidemiology and public health policy. He leads the team in research and development of public health campaigns to educate and protect the population.</p>
-        </div>
-      </div>
 
-      <div class="team-member">
-        <img src="https://via.placeholder.com/80" alt="Team Member 3">
-        <div>
-          <h3>Mary Johnson</h3>
-          <p>Community Outreach Coordinator</p>
-          <p>Mary connects with local organizations and communities to raise awareness about health initiatives. She works closely with schools, healthcare facilities, and public institutions to expand our outreach efforts.</p>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <footer>
-    <p>&copy; 2025 [Organization Name]. All rights reserved.</p>
-  </footer>
+
+<h3>What We Do</h3>
+<p>
+Welcome to the <strong>3 W’s of Getting Immunized</strong> platform.
+Our goal is to help individuals stay informed and proactive about their vaccination 
+health by making it easier to understand what vaccines they need, when they need them,
+and why they are important.Many people struggle to keep track of booster shots, 
+updated vaccine recommendations, and age-based requirements, so we created this platform to 
+organize that information in one simple and accessible place. By guiding users through personalized 
+questions based on their age and health status, we aim to provide clearer insight into their 
+immunization progress and any vaccines they may still need. We have a girly pop,
+design to make the design enjoyablable, and pretty duh! Additionally, we have
+a vaccination map, guiding users to nearby vaccination centers and clinics, making it easier to 
+find where they can get vaccinated and levels so they move up! 
+
+In addition to vaccination tracking, we also focus on women’s health awareness by including questions
+and information related to menstrual health, reproductive health, and preventive screenings.
+Understanding how hormonal changes, reproductive health, and overall wellness connect to medical care is important 
+for long-term health. Our platform is designed to encourage awareness, education, and prevention so individuals 
+feel more confident managing their health. Overall, our mission is to make health tracking more organized, understandable, 
+and accessible for everyone. AS AN ADULT YOU ARE IN CHARGE OF YOUR HEALTH, AND WE WANT TO HELP YOU TAKE CONTROL OF IT!
+
+
+</p>
+
+
+
+</div>
+
+<div class="button">
+<a href="form.html">Back to Form</a>
+</div>
+
+</div>
+
 </body>
 </html>

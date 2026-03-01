@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Awards Page</title>
+
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, sans-serif;
+            background-color: #dfc4f0;
+            padding: 20px;
+            margin: 0;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #efe7fb;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            position: relative;
+        }
+
+        h2 { color: #3f2a6b; }
+
+        .award-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .award-img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .info-box {
+            position: absolute;
+            width: 260px;
+            background: white;
+            padding: 14px;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+            text-align: left;
+            font-size: 14px;
+            display: none;
+        }
+
+        .next-btn {
+            margin-top: 20px;
+            cursor: pointer;
+            width: 200px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Your Vaccination Progress</h2>
+
+    <div class="award-wrapper">
+
+        <img src="images/awards.jpg" class="award-img">
+
+        <div id="infoBox" class="info-box"></div>
+
+    </div>
+
+    <img src="images/nextButton.png" class="next-btn"
+         onclick="window.location.href='nextpage.html'">
+</div>
+
+<script>
+window.addEventListener("DOMContentLoaded", () => {
+
+    const storedData = JSON.parse(localStorage.getItem("formData"));
+
+    if (!storedData || !storedData.answers) {
+        alert("⚠ No saved form data found.\nFill out the form first.");
+        return;
+    }
+
+    /* vaccine names in same order as form selects */
+    const vaccineNames = [
+        "Flu Vaccine",
+        "COVID-19 Vaccine",
+        "Tetanus Booster",
+        "HPV Vaccine",
+        "MMR Vaccine"
+    ];
+
+    let completed = 0;
+    let needed = [];
+
+    storedData.answers.forEach((ans, i) => {
+
+        ans = ans.toLowerCase();
+
+        if (
+            ans === "yes" ||
+            ans === "completed" ||
+            ans === "within 10 years" ||
+            ans === "2 doses"
+        ) {
+            completed++;
+        }
+        else if (ans !== "select" && ans !== "") {
+            needed.push(vaccineNames[i]);
+        }
+    });
+
+    const percent = Math.round(
+        (completed / storedData.answers.length) * 100
+    );
+
+    const box = document.getElementById("infoBox");
+
+    box.innerHTML = `
+        <strong>Vaccination Level: ${percent}%</strong><br><br>
+        <strong>You may need:</strong>
+        <ul>
+            ${
+                needed.length
+                ? needed.map(v => `<li>${v}</li>`).join("")
+                : "<li>You're fully protected 🎉</li>"
+            }
+        </ul>
+    `;
+
+    box.style.display = "block";
+
+    /* POSITION BOX NEXT TO VIALS */
+
+    if (percent < 25) {
+        box.style.left = "30px";
+        box.style.bottom = "30px";
+    }
+    else if (percent < 50) {
+        box.style.right = "30px";
+        box.style.bottom = "120px";
+    }
+    else if (percent < 75) {
+        box.style.left = "30px";
+        box.style.top = "200px";
+    }
+    else if (percent < 100) {
+        box.style.right = "30px";
+        box.style.top = "120px";
+    }
+    else {
+        box.style.left = "30px";
+        box.style.top = "40px";
+    }
+
+});
+</script>
+
+</body>
+</html>
