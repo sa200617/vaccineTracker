@@ -35,14 +35,36 @@
         /* WHITE TEXTBOX */
         .info-box {
             position: absolute;
-            width: 260px;
+            width: 280px;
             background: white;
-            padding: 14px;
+            padding: 16px;
             border-radius: 12px;
             box-shadow: 0 6px 18px rgba(0,0,0,0.25);
             text-align: left;
-            font-size: 14px;
+            font-size: 13px;
             display: none;
+            max-height: 420px;
+            overflow-y: auto;
+            line-height: 1.5;
+        }
+
+        .info-box ul {
+            padding-left: 16px;
+            margin: 6px 0;
+        }
+
+        .info-box ul li {
+            margin-bottom: 4px;
+        }
+
+        .info-box .msg-item {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .info-box .msg-item:last-child {
+            border-bottom: none;
         }
 
         .next-btn {
@@ -71,6 +93,136 @@
 </div>
 
 <script>
+
+// ─── MESSAGE MAPS ────────────────────────────────────────────────────────────
+// Each key = question label (lowercase), value = message to show if not complete
+
+const vaccineMessages = {
+
+    // UNDER 19 Vaccines
+    "mmr (measles, mumps, rubella)":
+        "Measles, mumps, and rubella are highly contagious diseases that can lead to severe complications such as pneumonia, meningitis, and birth defects. If you haven't received this vaccine, you remain at risk of contracting and spreading these illnesses. Schedule your vaccination as soon as possible to ensure full protection.",
+
+    "polio":
+        "Polio is a viral infection that can cause permanent paralysis and serious disability. Teens who have not completed the polio series are susceptible to infection. Contact your healthcare provider immediately to complete any missed doses.",
+
+    "chickenpox (varicella)":
+        "Chickenpox can be mild in childhood but can result in severe complications in adolescents, including pneumonia and encephalitis. If you have not had chickenpox or the vaccine, you should receive it promptly. Completing the series protects you and reduces risk to others.",
+
+    "hpv (recommended starting age 11-12)":
+        "HPV is a common virus that can cause cervical, anal, and other cancers later in life. Early vaccination maximizes protection and prevents infection before exposure. If you have not started or completed the series, make an appointment to begin vaccination.",
+
+    "meningococcal":
+        "Meningococcal infections can lead to life-threatening meningitis or sepsis. Unvaccinated adolescents, especially in school or dorm settings, are at higher risk. Get vaccinated to reduce the likelihood of serious illness.",
+
+    "annual flu vaccine":
+        "Seasonal flu can cause serious illness, missed school, or hospitalization. Vaccination is recommended yearly because influenza strains change. If you haven't received this year's flu shot, schedule it to stay protected.",
+
+    // UNDER 19 & 19-26 Women's Health
+    "are your menstrual cycles regular?":
+        "Regular cycles indicate healthy reproductive and hormonal function. Irregular cycles may signal underlying conditions like hormonal imbalances or thyroid disorders. Consult a healthcare provider if your cycles are irregular.",
+
+    "have you started hpv vaccination?":
+        "HPV vaccines prevent cancers caused by HPV infection. Starting early maximizes effectiveness. If you haven't begun, schedule your first dose with your healthcare provider.",
+
+    "have you experienced abnormal vaginal bleeding?":
+        "Unexpected bleeding could indicate hormonal issues, infections, or other medical conditions. Prompt evaluation is important for early diagnosis and treatment. Contact your healthcare provider immediately if this occurs.",
+
+    "do you experience urinary incontinence or frequent utis?":
+        "Frequent urinary tract infections or incontinence can affect daily life and may indicate underlying health issues. Early management can prevent complications. See a healthcare provider for assessment and treatment.",
+
+    // 19-26 Vaccines
+    "chickenpox":
+        "Chickenpox in adulthood can lead to more severe illness than in childhood. If you haven't been vaccinated or had chickenpox, you are at risk. Schedule vaccination with your healthcare provider.",
+
+    "hepatitis b":
+        "Hepatitis B can cause liver failure, cirrhosis, or liver cancer. Unvaccinated individuals are at higher risk of infection. Start or complete the Hepatitis B vaccine series promptly.",
+
+    "hpv":
+        "HPV vaccination reduces risk of cervical, anal, and other cancers. Completing the series is crucial for full protection. If incomplete, schedule remaining doses as soon as possible.",
+
+    // 19-26 Women's Health
+    "have you had a pap smear in the past 3 years?":
+        "Pap smears screen for cervical cancer and other abnormalities. Regular screening starting at age 21 is essential. If overdue, schedule a Pap smear promptly.",
+
+    "are you currently pregnant or planning pregnancy?":
+        "Vaccines and medications may need adjustment during pregnancy. Planning ahead ensures safety for both you and your baby. Consult your provider for recommendations.",
+
+    // 27-49 Vaccines
+    "mmr":
+        "Measles, mumps, and rubella can be severe in adults, causing complications like meningitis or infertility. Ensure immunity through vaccination. Get vaccinated if you are not protected.",
+
+    "tdap / td":
+        "Tetanus, diphtheria, and pertussis can be life-threatening without booster protection. Adults should receive Tdap at least once and Td every 10 years. Schedule a booster if you are overdue.",
+
+    "flu vaccine":
+        "Seasonal influenza can result in serious illness. Annual vaccination provides protection against changing strains. Receive your flu shot each year.",
+
+    "covid vaccine":
+        "COVID-19 can cause severe illness or long-term effects. Vaccination reduces risk of infection, hospitalization, and complications. Get your updated doses if you haven't received them.",
+
+    "pregnancy status":
+        "Vaccination recommendations differ during pregnancy. Ensuring safety protects both mother and baby. Consult your provider if planning or currently pregnant.",
+
+    // 50-64 Vaccines
+    "flu":
+        "Seasonal influenza can lead to serious complications, particularly in adults over 50. Annual vaccination is strongly recommended. Get your flu shot to reduce risk of illness.",
+
+    "covid":
+        "COVID-19 can be more severe with age. Vaccination and boosters provide protection against severe outcomes. Stay up-to-date with the latest recommended doses.",
+
+    "tdap / td booster":
+        "Booster vaccines prevent tetanus, diphtheria, and pertussis. Adults should maintain protection with boosters every 10 years. Schedule a booster if you are overdue.",
+
+    "pneumococcal":
+        "Pneumococcal infections can cause pneumonia and bloodstream infections. Vaccination is critical for adults over 50. Ask your provider about the recommended vaccine series.",
+
+    "shingles (shingrix)":
+        "Shingles can be extremely painful and cause nerve complications. Adults over 50 should receive the Shingrix vaccine in two doses. Schedule both doses for full protection.",
+
+    // 50-64 & 65+ Women's Health
+    "have you experienced any vaginal bleeding after menopause?":
+        "Postmenopausal bleeding can indicate hormone changes, polyps, or cancer. Prompt medical evaluation is necessary. Contact your healthcare provider immediately if this occurs.",
+
+    "do you have urinary incontinence or frequent utis?":
+        "Urinary symptoms may indicate underlying conditions. Early evaluation can prevent complications and improve quality of life. Consult a healthcare provider for assessment and management.",
+
+    "have you had a mammogram in the past 2 years?":
+        "Mammograms detect breast cancer early, improving treatment outcomes. Regular screening is recommended for women over 50. Schedule a mammogram if you are overdue.",
+
+    // 65+ Vaccines
+    "have you received the covid-19 vaccine?":
+        "Older adults are at higher risk for severe COVID-19 outcomes. Vaccination reduces risk of hospitalization, severe disease, and complications. Stay current with booster doses recommended for your age group.",
+
+    "have you received the flu vaccine?":
+        "Influenza can cause serious illness in seniors. Annual vaccination is crucial for protection. Get your flu shot each year to minimize risk.",
+
+    "have you received the pneumococcal vaccine?":
+        "Pneumonia and serious lung infections are more common in adults over 65. Vaccination provides effective protection. Discuss with your provider to ensure you are fully vaccinated.",
+
+    "have you received the shingles vaccine?":
+        "Shingles can cause painful nerve complications in older adults. Two doses of Shingrix are recommended for full protection. Schedule both doses if you haven't completed them.",
+
+    "have you received the rsv vaccine?":
+        "Respiratory syncytial virus (RSV) can lead to severe lung infections in seniors. Vaccination helps prevent hospitalization and serious illness. Ask your healthcare provider about receiving the RSV vaccine.",
+
+    "have you received the tdap / td booster?":
+        "Maintaining protection against tetanus, diphtheria, and pertussis is important at all ages. Adults should receive boosters every 10 years. Schedule your booster if overdue.",
+};
+
+// Answers that count as "complete/protected" — no message shown
+const completeValues = ["yes", "completed", "2 doses", "within 10 years"];
+
+// These question answers that need special logic (if "no" = concerning, if "yes" = fine)
+// For women's health: "yes" to having symptoms is the concern
+const symptomQuestions = [
+    "have you experienced abnormal vaginal bleeding?",
+    "do you experience urinary incontinence or frequent utis?",
+    "do you have urinary incontinence or frequent utis?",
+    "have you experienced any vaginal bleeding after menopause?",
+];
+
+// ─── MAIN LOGIC ───────────────────────────────────────────────────────────────
 window.addEventListener("DOMContentLoaded", () => {
     const storedData = JSON.parse(localStorage.getItem("formData"));
 
@@ -81,39 +233,89 @@ window.addEventListener("DOMContentLoaded", () => {
 
     let completed = 0;
     let needed = [];
+    let messages = [];
 
-    storedData.answers.forEach((ans, i) => {
-        const value = ans.answer.toLowerCase();
+    storedData.answers.forEach((ans) => {
+        const rawQuestion = ans.question || "";
+        const rawAnswer = ans.answer || "";
+        const questionKey = rawQuestion.toLowerCase().trim();
+        const value = rawAnswer.toLowerCase().trim();
 
-        if (
-            value === "yes" ||
-            value === "completed" ||
-            value === "2 doses" ||
-            value === "within 10 years"
-        ) {
-            completed++;
-        } else if (value !== "select") {
-            needed.push("Vaccine " + (i + 1));
+        // Skip headers / unknowns
+        if (!value || value === "select" || questionKey === "unknown") return;
+
+        // Count completions
+        const isComplete = completeValues.some(cv => value === cv || value.includes(cv));
+
+        // Is this a symptom question (yes = problem)?
+        const isSymptomQ = symptomQuestions.includes(questionKey);
+
+        // Determine if action is needed
+        let needsAction = false;
+
+        if (isSymptomQ) {
+            // For symptom questions: "yes" means they have the symptom = needs attention
+            if (value === "yes") needsAction = true;
+            else completed++;
+        } else {
+            if (isComplete) {
+                completed++;
+            } else if (value !== "select" && value !== "") {
+                needsAction = true;
+            }
+        }
+
+        if (needsAction) {
+            const msg = vaccineMessages[questionKey];
+            if (msg) {
+                // Format the question nicely for display
+                const displayQ = rawQuestion.length > 60
+                    ? rawQuestion.substring(0, 60) + "..."
+                    : rawQuestion;
+                needed.push(rawQuestion);
+                messages.push({ question: displayQ, text: msg });
+            }
         }
     });
 
-    const percent = Math.round((completed / storedData.answers.length) * 100);
+    const total = storedData.answers.filter(a => {
+        const v = (a.answer || "").toLowerCase();
+        return v && v !== "select";
+    }).length;
+
+    const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
     const box = document.getElementById("infoBox");
 
-    box.innerHTML = `
-        <strong>Vaccination Level: ${percent}%</strong>
+    // Build the needed vaccines list (deduplicated)
+    const vaccineNeeded = needed.filter((q, i) => needed.indexOf(q) === i);
 
+    let msgHTML = messages.map(m => `
+        <div class="msg-item">
+            <strong style="color:#5b3ea6; font-size:12px;">${m.question}</strong><br>
+            <span>${m.text}</span>
+        </div>
+    `).join("");
+
+    box.innerHTML = `
+        <strong style="font-size:15px; color:#3f2a6b;">Vaccination Level: ${percent}%</strong>
+        <hr style="margin: 8px 0;">
 
         <strong>You may need:</strong>
         <ul>
-            ${needed.length ? needed.map(v => `<li>${v}</li>`).join("") : "<li>You're fully protected 🎉</li>"}
+            ${vaccineNeeded.length
+                ? vaccineNeeded.map(v => `<li>${v}</li>`).join("")
+                : "<li>You're fully protected 🎉</li>"}
         </ul>
+
+        <strong>Important Information:</strong>
+        <div style="margin-top:6px;">
+            ${messages.length ? msgHTML : "<p>All vaccinations and health checks are up to date.</p>"}
+        </div>
     `;
 
     box.style.display = "block";
 
     /* POSITION NEXT TO EACH VIAL AREA */
-    /* tweak numbers based on your image layout */
     if (percent < 25) {
         box.style.left = "30px";
         box.style.bottom = "40px";
